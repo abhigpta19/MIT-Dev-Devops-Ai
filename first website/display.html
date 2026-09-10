@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box{
+            height: 100px;
+            width: 100px;
+            background-color: lightblue;
+            border: 2px solid black;
+            margin: 10px;
+            padding: 10px;
+        }
+
+        .spanclass{
+            background-color: lightgreen;
+            border: 2px solid black;
+            margin: 10px;
+            padding: 10px;
+        }
+
+        .container{
+            border: 2px solid black;
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        img{
+            height: 50px;
+        }
+
+        .left{
+            display: flex;
+        }
+
+        .center{
+            display: flex;
+        }
+        
+        .right{
+            display: flex;
+        }
+
+        .navbar{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid black;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- <div class="container">
+        <div class="box">box1</div>
+        <div class="box">box2</div>
+        <div class="box">box3</div>
+        <div class="box">bpx4</div>
+    </div> -->
+    <!-- <div class="box">div 1</div> -->
+    
+    <!-- <span class="spanclass">span 2</span> -->
+
+    <!-- <span class="spanclass">About</span>
+    <span class="spanclass">Skills</span>
+    <span class="spanclass">Contacts</span>
+    <span class="spanclass">Projects</span>
+    <div class="box">this is my content</div> -->
+
+    <div class="navbar">
+        <div class="left">
+            <img src="download.jpeg"> 
+            <h1>MIT Moradabad</h1>
+        </div>
+        <div class="center">
+            <div>Home</div>
+            <div>About</div>
+            <div>Contact</div>
+        </div>
+        <div class="right">
+            <div>Login</div>
+            <div>Sign Up</div>
+        </div>
+    </div>
+</body>
+</html>
