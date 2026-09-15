@@ -86,20 +86,20 @@
 
 
 
-// function counter() {
-//     let count = 0;
+function counter() {
+    let count = 0;
 
-//     return function () {
-//         count++;
-//         console.log(count);
-//     };
-// }
+    return function () {
+        count++;
+        console.log(count);
+    };
+}
 
-// const c1 = counter();
+const c1 = counter();
 
-// c1();
-// c1();
-// c1();
+c1();
+c1();
+c1();
 
 
 // function counter() {
