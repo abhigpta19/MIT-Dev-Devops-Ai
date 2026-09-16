@@ -1,17 +1,17 @@
 
 
-console.log(a1);
-var a1 = 10;
-var a2 = 20;
-console.log(a2);
+// console.log(a1);
+// var a1 = 10;
+// var a2 = 20;
+// console.log(a2);
 
-fn();
-function fn()
-{
-    var a = 1;
-    var b = 2;
-    console.log(a+b);
-}
+// fn();
+// function fn()
+// {
+//     var a = 1;
+//     var b = 2;
+//     console.log(a+b);
+// }
 
 
 
@@ -527,3 +527,191 @@ function fn()
 // }
 
 // console.log(student1.year === student2.year)
+
+
+// let count = 0;
+
+// function f1()
+// {
+//     count++;
+//     console.log(count);
+// }
+
+// function f2()
+// {
+//     count++;
+//     console.log(count);
+// }
+
+
+// f1();
+// f1();
+// f2();
+// f2();
+
+
+// function fn()
+// {
+//     let count = 0;
+
+//     function inc()
+//     {
+//         count++;
+//         console.log(count);
+//     }
+
+//     return inc;
+// }
+
+
+// let fn1 = fn();
+// let fn2 = fn();
+
+// fn1();
+// fn1();
+// fn2();
+// fn2();
+
+// let c= 4;
+
+
+// function fn(a,b){
+//     return a+b+c;
+// }
+
+// console.log(f(1,2));
+
+
+// function copy(o1,o2)
+// {
+//     o1.name = o2.name;
+//     o1.phone = o2.phone;
+//     o1.gpa = o2.gpa;
+// }
+
+
+// const s1 = {name: "abc", phone: "123", gpa: ["9.2","8.8"]};
+
+// const s2 = {...s1};
+
+// copy(s2,s1);
+// s2.name = "xyz";
+// s2.gpa[1]="5.6";
+
+// console.log(s1,s2);
+
+
+// function fn({name,rollno,phone})
+// {
+//     // const n = obj.name;
+//     // const ph = obj.phone;
+//     // const rn = obj.rollno;
+//     // const {name,phone,rollno} = obj;
+
+//     console.log("name : ", name);
+//     console.log("roll no : ", rollno);
+//     console.log("phone : ", phone);
+// }
+
+// const obj1 = {
+//     name: "abhi",
+//     rollno: 1,
+//     phone : "123"
+// }
+
+// const obj2 = {...obj1,phone:"987"};
+// console.log(obj2);
+// const {phone} = obj1;
+// console.log(phone);
+
+
+// const arr = [1,2,3];
+
+// const a = arr[0];
+// const b = arr[1];
+
+// const [a,b,c,d] = arr;
+// console.log(a,b,c,d);
+
+
+// spread operator and destructuring
+
+// const s1 = {
+//     name:"abc", 
+//     phone: "123", 
+//     address : {
+//         city: "Noida",
+//         state: "UP"
+//     }
+// }
+
+// const s2 = s1; // wrong
+// const s2 = JSON.parse(JSON.stringify(s1));
+// const s2 = structuredClone(s1);
+
+// const s1str = JSON.stringify(s1);
+// // console.log(typeof s1str);
+// const s2str = s1str;
+
+// const s2 = JSON.parse(s2str);
+// s2.address.city="Moradabad"
+// console.log(s2);
+
+
+
+
+// const s2 = {...s1,name:"xyz",address:{...s1.address}};
+// s2.address.city = "Moradabad";
+
+// console.log(s1,s2);
+
+
+// function add(a,b){
+//     return a+b;
+// }
+
+// function multiply(a,b){
+//     return a*b;
+// }
+
+// function operation(a,b,fn)
+// {
+//     let ans = fn(a,b)
+//     console.log(ans)
+// }
+
+// operation(2, 4, add);
+
+// operation(5 , 2 , function(a,b){
+//     return a-b;
+// })
+
+
+//map, filter , reduce, find , some
+//foreach
+
+
+// let a = 10;
+
+// function fn()
+// {
+//     console.log(a);
+// }
+
+// setTimeout(fn,1000);
+
+
+for(var i=1;i<=5;i++)
+{
+    function fn(x)
+    {
+        setTimeout(function(){
+            console.log(x);
+        },1000*x);
+    }
+
+    fn(i);
+}
+    
+
+
