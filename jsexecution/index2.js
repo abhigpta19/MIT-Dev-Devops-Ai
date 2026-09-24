@@ -44,107 +44,112 @@
 
 
 
-// // // // // console.log("start");
-// // // // // var a1 = 10;
-// // // // // console.log(a1);
-// // // // // console.log(a2);
-// // // // // var a2 =20;
+// console.log("start");
+// var a1 = 10;
+// console.log(a1);
+// console.log(a2);
+// var a2 =20;
 
-// // // // // function fn(){
-// // // // //     var b1 = 10;
-// // // // //     var b2 = 20;
+// function fn(){
+//     var b1 = 10;
+//     var b2 = 20;
 
-// // // // //     return b1*b2;
-// // // // // }
+//     return b1*b2;
+// }
 
-// // // // // console.log(fn());
-// // // // // console.log("end");
-
-
-
-
-// // // // //gec --> x=10,fn3={...fn2}    fn1, fn4
-// // // // //fn4--> x=30
-// // // // //fn3 --> cl(x)
-
-// // // // var x = 10;
-
-// // // // function f1()
-// // // // {
-// // // //     var x=25;
-// // // //     console.log(x);
-// // // // }
-
-// // // // f1();
+// console.log(fn());
+// console.log("end");
 
 
 
 
-// // // // function f1()
-// // // // {
-// // // //     var x = 10;
-
-// // // //     var f2 = function()
-// // // //     {
-// // // //         console.log(x);
-// // // //     }
-
-// // // //     return f2;
-// // // // }
-
-// // // // var fn = f1();
-// // // // x=100;
-// // // // fn();
 
 
-// // // var a = 10;
-// // // var b = 20;
+// //gec --> x=10,fn3={...fn2}    fn1, fn4
+// //fn4--> x=30
+// //fn3 --> cl(x)
 
-// // // function af1()
-// // // {
-// // //     var a = 100;
+// var x = 10;
 
-// // //     function af2()
-// // //     {
-// // //         var b = 200;
-// // //         var c = 300;
+// function f1()
+// {
+//     var x=25;
+//     console.log(x);
+// }
 
-// // //         function af3()
-// // //         {
-// // //             var c = 300;
-// // //             console.log(a+b+c);
-// // //         }
-
-// // //         return af3;
-// // //     }
-    
-// // //    return af2();
-// // // }
-
-
-// // // var fn = af1();
-// // // fn();
+// f1();
 
 
 
-// // function counter() {
-// //     var count = 0;
 
-// //     return function () {
-// //         count++;
-// //         console.log(count);
-// //     };
-// // }
 
-// // var c1 = counter();
-// // var c2 = counter();
+// function f1()
+// {
+//     var x = 10;
 
-// // c1();
-// // c2();
-// // c1();
-// // c1();
-// // c2();
-// // c2();
+//     var f2 = function()
+//     {
+//         console.log(x);
+//     }
+
+//     return f2;
+// }
+
+// var fn = f1();
+// x=100;
+// fn();
+
+
+
+
+
+
+// var a = 10;
+// var b = 20;
+
+// function af1()
+// {
+//     var a = 100;
+//     function af2()
+//     {
+//         var b = 200;
+//         var c = 300;
+//         function af3()
+//         {
+//             var c = 300;
+//             console.log(a+b+c);
+//         }
+//         return af3;
+//     }
+//    return af2();
+// }
+// var fn = af1();
+// fn();
+
+
+
+
+
+// function counter() {
+//     var count = 0;
+
+//     return function () {
+//         count++;
+//         console.log(count);
+//     };
+// }
+// var c1 = counter();
+// var c2 = counter();
+// c1();
+// c2();
+// c1();
+// c1();
+// c2();
+// c2();
+
+
+
+
 
 
 // // once function
@@ -170,10 +175,10 @@
 // fn();
 
 
+
+
+
 // var let const;
-
-
-
 // Hoisting
 
 // console.log(a);
@@ -689,29 +694,28 @@
 
 //map, filter , reduce, find , some
 //foreach
-
-
 // let a = 10;
-
 // function fn()
 // {
 //     console.log(a);
 // }
-
 // setTimeout(fn,1000);
 
 
-for(var i=1;i<=5;i++)
-{
-    function fn(x)
-    {
-        setTimeout(function(){
-            console.log(x);
-        },1000*x);
-    }
 
-    fn(i);
-}
+
+
+
+// for(var i=1;i<=5;i++)
+// {
+//     function fn(x)
+//     {
+//         setTimeout(function(){
+//             console.log(x);
+//         },1000*x);
+//     }
+
+//     fn(i);
+// }
     
-
 

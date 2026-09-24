@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Circle Collision</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        #screen {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            background: #111;
+            cursor: crosshair;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.65;
+        }
+
+        #message {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            padding: 12px 24px;
+
+            background: white;
+            border-radius: 8px;
+
+            font-size: 20px;
+            font-weight: bold;
+
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="screen">
+        <div id="message">
+            Click anywhere
+        </div>
+    </div>
+
+    <script>
+
+        const screen = document.querySelector("#screen");
+        const message = document.querySelector("#message");
+
+        let circles = [];
+
+        screen.addEventListener("click", (event) => {
+
+            // Third click → reset everything
+            if (circles.length === 2) {
+
+                circles.forEach(circle => {
+                    circle.element.remove();
+                });
+
+                circles = [];
+
+                message.innerText = "Click anywhere";
+
+                return;
+            }
+
+
+            // Mouse position relative to screen
+            const x = event.clientX;
+            const y = event.clientY;
+
+
+            // Random radius between 30 and 100
+            const radius = Math.floor(
+                Math.random() * 300
+            ) + 30;
+
+
+            // Create circle
+            const circle = document.createElement("div");
+
+            circle.classList.add("circle");
+
+
+            // Set size
+            circle.style.width = `${radius * 2}px`;
+            circle.style.height = `${radius * 2}px`;
+
+
+            // Set position
+            circle.style.left = `${x}px`;
+            circle.style.top = `${y}px`;
+
+
+            // Random color
+            circle.style.backgroundColor =
+                `hsl(${Math.random() * 360}, 80%, 60%)`;
+
+
+            // Add circle to screen
+            screen.appendChild(circle);
+
+
+            // Store circle information
+            circles.push({
+                x: x,
+                y: y,
+                radius: radius,
+                element: circle
+            });
+
+
+            // First circle
+            if (circles.length === 1) {
+
+                message.innerText =
+                    "Now click somewhere else";
+
+                return;
+            }
+
+
+            // We have two circles
+            const circle1 = circles[0];
+            const circle2 = circles[1];
+
+
+            // Calculate distance between centers
+            const dx = circle2.x - circle1.x;
+            const dy = circle2.y - circle1.y;
+
+            const distance = Math.sqrt(
+                dx * dx + dy * dy
+            );
+
+
+            // Collision detection
+            const overlapping =
+                distance <=
+                circle1.radius + circle2.radius;
+
+
+            if (overlapping) {
+
+                message.innerText =
+                    "🔴 OVERLAPPING";
+
+            } else {
+
+                message.innerText =
+                    "🟢 NO OVERLAP";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>

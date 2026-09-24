@@ -1,0 +1,1108 @@
+DOM
+1. What Actually Happens When HTML Loads? — 10 min
+
+Show:
+
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Hello</h1>
+
+        <div>
+            <p>Welcome</p>
+            <button>Click</button>
+        </div>
+    </body>
+</html>
+
+Tell them:
+
+The browser doesn't just "display HTML."
+
+It parses HTML and creates an in-memory tree-like representation.
+
+                document
+                   |
+                 html
+                   |
+                 body
+              /         \
+            h1           div
+            |          /    \
+          Hello        p    button
+                       |       |
+                   Welcome    Click
+
+This is the DOM tree.
+
+Important distinction
+HTML
+ ↓
+Browser parses it
+ ↓
+DOM
+ ↓
+JavaScript interacts with DOM
+ ↓
+Browser updates what you see
+
+Don't go deep into browser internals yet.
+
+Just give them this mental model:
+
+HTML is the initial structure. DOM is the browser's live representation of that structure.
+
+2. 🔥 Open DevTools and Actually See the DOM
+
+This should be a major part of the lecture.
+
+Open:
+
+Chrome → DevTools → Console
+
+Run:
+
+document
+
+Then:
+
+document.body
+
+Then:
+
+document.body.children
+
+Then:
+
+document.body.children[0]
+
+Then:
+
+document.querySelector("h1")
+
+Then:
+
+document.querySelectorAll("p")
+
+Show them that these aren't strings.
+
+They are objects representing HTML elements.
+
+3. The DOM Is LIVE 😮
+
+This is a very cool demonstration.
+
+Suppose:
+
+<h1 id="title">Hello</h1>
+
+Console:
+
+const title = document.querySelector("#title");
+
+title.innerText = "DOM is powerful!";
+
+The page changes immediately.
+
+Then:
+
+title.style.color = "red";
+
+Then:
+
+title.style.fontSize = "60px";
+
+Then:
+
+title.style.backgroundColor = "yellow";
+
+Now ask:
+
+"Did we modify the HTML file?"
+
+No.
+
+We modified the DOM representation.
+
+4. Selecting Elements
+
+Teach only the selectors they'll actually use.
+
+getElementById
+document.getElementById("title");
+querySelector
+document.querySelector("h1");
+document.querySelector(".card");
+document.querySelector("#title");
+
+And importantly:
+
+document.querySelector(".card button");
+
+CSS selector knowledge directly transfers here.
+
+querySelectorAll
+const cards = document.querySelectorAll(".card");
+
+console.log(cards);
+
+Then:
+
+cards.forEach(card => {
+    console.log(card);
+});
+🔥 Important concept
+
+Ask:
+
+document.querySelector(".card")
+
+vs
+
+document.querySelectorAll(".card")
+
+One returns the first matching element.
+
+The other returns all matching elements.
+
+5. Controlling HTML
+
+Now give them the DOM control toolbox.
+
+Change text
+element.innerText = "Hello";
+
+and:
+
+element.textContent = "Hello";
+
+Briefly explain:
+
+innerText → visible text
+textContent → text content regardless of visual rendering
+
+Don't spend 20 minutes on the distinction.
+
+6. innerHTML — 🔥 First "Power" Concept
+const box = document.querySelector(".box");
+
+box.innerHTML = `
+    <h2>Hello</h2>
+    <p>This was created using JavaScript</p>
+`;
+
+Now:
+
+box.innerHTML += `
+    <button>Click me</button>
+`;
+
+
+
+JavaScript isn't limited to changing existing HTML. It can generate HTML.
+
+Then immediately teach the important production warning:
+
+element.innerHTML = userInput;
+
+can become a security problem if untrusted content is inserted.
+
+You don't need to teach XSS deeply today.
+
+Just plant the seed:
+
+innerHTML is powerful, therefore dangerous when used with untrusted input.
+
+That already makes the lecture feel less "beginner tutorial."
+
+7. Attributes
+
+HTML:
+
+<img id="profile" src="cat.jpg">
+
+JavaScript:
+
+const img = document.querySelector("#profile");
+
+img.src = "dog.jpg";
+
+Also:
+
+img.setAttribute("src", "dog.jpg");
+
+Read:
+
+img.getAttribute("src");
+
+Remove:
+
+img.removeAttribute("src");
+
+And:
+
+element.hasAttribute("disabled");
+8. Classes — Production-Relevant
+
+Don't teach:
+
+element.style.color = ...
+element.style.backgroundColor = ...
+element.style.padding = ...
+
+as the primary way of building UI.
+
+Instead introduce:
+
+element.classList
+
+Example:
+
+card.classList.add("active");
+card.classList.remove("active");
+card.classList.toggle("active");
+card.classList.contains("active");
+
+This is a great moment to tell them:
+
+In real applications, JavaScript usually controls state/classes, while CSS controls presentation.
+
+For example:
+
+menu.classList.toggle("open");
+
+CSS:
+
+.menu.open {
+    display: block;
+}
+
+That is a much more professional mental model.
+
+9. Creating DOM Elements Dynamically
+
+This is where things become interesting.
+
+const card = document.createElement("div");
+
+card.innerText = "I was created using JS";
+
+document.body.appendChild(card);
+
+Then:
+
+const button = document.createElement("button");
+
+button.innerText = "Delete";
+
+card.appendChild(button);
+
+Then:
+
+card.remove();
+
+Teach these:
+
+createElement()
+append()
+appendChild()
+prepend()
+remove()
+
+Don't overwhelm them with every DOM method.
+
+10. 🔥 Mini Challenge — Build DOM Without HTML
+
+Give them:
+
+<div id="app"></div>
+
+Challenge:
+
+Using JavaScript only, create this:
+
+┌──────────────────────┐
+│      My Profile      │
+│                      │
+│ Name: Abhishek       │
+│ Skills: JavaScript  │
+│                      │
+│       [Follow]       │
+└──────────────────────┘
+
+They have to create:
+
+div
+h2
+p
+button
+
+using createElement.
+
+This forces them to actually understand DOM manipulation.
+
+11. 🚨 Now Introduce Events
+
+Ask:
+
+"Okay, JavaScript can control HTML. But how does JavaScript know that the user did something?"
+
+Introduce:
+
+Events
+
+Things that happen:
+
+click
+dblclick
+mousemove
+mousedown
+mouseup
+keydown
+keyup
+input
+change
+submit
+mouseenter
+mouseleave
+scroll
+
+Don't teach all of them deeply.
+
+Focus on:
+
+click
+input
+change
+submit
+keydown
+mousemove
+12. addEventListener
+
+Start with:
+
+button.addEventListener("click", () => {
+    console.log("Button clicked");
+});
+
+Then:
+
+button.addEventListener("click", function () {
+    console.log("clicked");
+});
+
+Explain:
+
+element
+   ↓
+addEventListener
+   ↓
+event type
+   ↓
+callback
+
+Conceptually:
+
+"When this event happens, execute this function."
+
+13. The Event Object 🔥
+
+Now:
+
+button.addEventListener("click", (event) => {
+    console.log(event);
+});
+
+Open the object.
+
+Show them things like:
+
+event.type
+event.target
+event.currentTarget
+event.clientX
+event.clientY
+
+This is where you can make it interesting.
+
+Click anywhere:
+
+document.addEventListener("click", (event) => {
+    console.log(event.clientX, event.clientY);
+});
+
+Now students can see the mouse coordinates.
+
+14. target vs currentTarget
+
+This is an important professional concept.
+
+HTML:
+
+<div id="parent">
+    <button>Click</button>
+</div>
+
+JS:
+
+parent.addEventListener("click", (event) => {
+    console.log("target:", event.target);
+    console.log("currentTarget:", event.currentTarget);
+});
+
+Click button.
+
+Explain:
+
+target
+→ element where the event originated
+
+currentTarget
+→ element whose listener is currently executing
+
+This sets up bubbling perfectly.
+
+15. 🔥 Event Bubbling — Visual Demo
+
+Use:
+
+<div id="grandparent">
+    GRANDPARENT
+
+    <div id="parent">
+        PARENT
+
+        <button id="child">
+            CHILD
+        </button>
+    </div>
+</div>
+
+Attach listeners:
+
+grandparent.addEventListener("click", () => {
+    console.log("grandparent");
+});
+
+parent.addEventListener("click", () => {
+    console.log("parent");
+});
+
+child.addEventListener("click", () => {
+    console.log("child");
+});
+
+Click button.
+
+Output:
+
+child
+parent
+grandparent
+
+Draw:
+
+          GRANDPARENT
+               ↑
+             PARENT
+               ↑
+             BUTTON
+
+Event travels upward.
+
+This is bubbling.
+16. Stop Bubbling
+child.addEventListener("click", (event) => {
+    event.stopPropagation();
+
+    console.log("child");
+});
+
+Now:
+
+child
+
+Tell them:
+
+stopPropagation() stops the event from continuing through the propagation path.
+
+But warn them:
+
+Don't randomly use stopPropagation() everywhere. It can break other event logic.
+
+17. Capturing
+
+Now show:
+
+grandparent.addEventListener(
+    "click",
+    () => console.log("grandparent"),
+    true
+);
+
+Or preferably explain the third argument:
+
+{
+    capture: true
+}
+
+Example:
+
+grandparent.addEventListener("click", handler, {
+    capture: true
+});
+
+Now visualize:
+
+CAPTURING
+
+grandparent
+     ↓
+   parent
+     ↓
+   button
+
+TARGET
+
+button
+
+BUBBLING
+
+button
+  ↑
+parent
+  ↑
+grandparent
+
+Give them the complete mental model:
+
+        CAPTURE
+           ↓
+Grandparent
+           ↓
+Parent
+           ↓
+Button
+           ↑
+        BUBBLE
+
+That's enough for today.
+
+18. 🔥 Event Delegation
+
+This is where you make them feel:
+
+"Oh... this is actually used in real applications."
+
+HTML:
+
+<ul id="todos">
+    <li>Learn DOM</li>
+    <li>Learn Events</li>
+    <li>Build Project</li>
+</ul>
+
+Instead of:
+
+document.querySelectorAll("li").forEach(li => {
+    li.addEventListener("click", ...);
+});
+
+Do:
+
+todos.addEventListener("click", (event) => {
+    if (event.target.tagName === "LI") {
+        console.log(event.target.innerText);
+    }
+});
+
+Explain:
+
+We attach one listener to the parent and use bubbling to handle events from children.
+
+Then show why this is powerful.
+
+Create a new <li> after the listener was registered.
+
+const li = document.createElement("li");
+li.innerText = "New Task";
+
+todos.append(li);
+
+Click it.
+
+It still works.
+
+🔥
+
+That's a very strong demonstration.
+
+19. The Big DOM Mental Model
+
+Pause and consolidate.
+
+Tell students:
+
+HTML
+ │
+ ▼
+DOM TREE
+ │
+ ├── SELECT
+ │     querySelector
+ │     querySelectorAll
+ │
+ ├── READ
+ │     innerText
+ │     value
+ │     getAttribute
+ │
+ ├── MODIFY
+ │     classList
+ │     style
+ │     attributes
+ │
+ ├── CREATE
+ │     createElement
+ │     append
+ │
+ ├── REMOVE
+ │     remove
+ │
+ └── REACT
+       events
+       event listeners
+       bubbling
+       capturing
+       delegation
+
+Then:
+
+DOM + Events + JavaScript Logic = Interactive Web Page
+
+🔥 20. MINI PROJECT 1 — Random Color Generator
+
+Very easy first project.
+
+UI:
+
+┌─────────────────────┐
+│                     │
+│      #3A7BD5        │
+│                     │
+│   [ Generate ]      │
+│                     │
+└─────────────────────┘
+
+When clicking:
+
+Generate
+   ↓
+Random RGB
+   ↓
+Change background
+   ↓
+Display HEX
+
+Students need to implement:
+
+Math.random()
+
+DOM:
+
+element.style.backgroundColor
+element.innerText
+
+Events:
+
+click
+Extension
+
+Add:
+
+[ Copy Color ]
+
+Using:
+
+navigator.clipboard.writeText(color);
+
+Now it starts feeling like an actual tool.
+
+🔥 21. MINI PROJECT 2 — Color Flicker
+
+Make a full-screen box.
+
+Every:
+
+100ms
+
+change its color randomly.
+
+They already know timers, so now combine:
+
+setInterval
++
+Math.random
++
+DOM
++
+CSS
+setInterval(() => {
+    document.body.style.backgroundColor = randomColor();
+}, 100);
+
+Then challenge them:
+
+"Can you make it stop when I click?"
+
+START
+STOP
+
+Now they have to manage:
+
+let intervalId;
+
+This combines your previous JS lesson with today's DOM.
+
+🔥 22. MINI PROJECT 3 — Click Counter / Reaction Game
+
+Create:
+
+Clicks: 0
+
+        🟢
+
+Click the circle!
+
+Every click:
+
+count++
+
+Update DOM.
+
+Then make it interesting:
+
+Reaction game
+WAIT...
+
+       ↓
+
+CLICK NOW!
+
+Measure:
+
+Date.now()
+
+Student clicks.
+
+Calculate:
+
+reaction time: 237ms
+
+Now you're combining:
+
+DOM
++
+events
++
+timers
++
+logic
+🔥🔥 23. MINI PROJECT 4 — Random Circle Collision
+
+This is the one I'd definitely do with your class.
+
+Create a fixed playground:
+
+┌────────────────────────────────────┐
+│                                    │
+│        🔵                          │
+│                         🟠         │
+│                                    │
+│                                    │
+└────────────────────────────────────┘
+
+Generate two circles.
+
+Each has:
+
+x
+y
+radius
+
+Example:
+
+circle1 = {
+    x: 100,
+    y: 150,
+    radius: 40
+};
+
+Randomize:
+
+radius = random
+x = random
+y = random
+
+Render using DOM.
+
+24. The Interesting Part — Collision Mathematics
+
+Ask them:
+
+"How do we know whether two circles overlap?"
+
+Don't give the formula immediately.
+
+Let them reason.
+
+Distance between centers:
+
+        B
+        ●
+       / 
+      / d
+     /
+    ●
+    A
+
+Distance:
+
+const dx = x2 - x1;
+const dy = y2 - y1;
+
+const distance = Math.sqrt(
+    dx * dx + dy * dy
+);
+
+Two circles overlap if:
+
+distance <= radius1 + radius2
+
+🔥
+
+Now you're teaching:
+
+Math
++
+JavaScript
++
+DOM
++
+CSS
++
+visualization
+
+That's a much better learning experience than:
+
+"Here's what querySelector() does."
+
+25. Make The Circle Project Interactive
+
+Add:
+
+[Generate Circles]
+
+Every click:
+
+remove old circles
+        ↓
+generate two
+        ↓
+calculate collision
+        ↓
+display result
+
+Display:
+
+🟢 Circles Overlap
+
+or
+
+🔴 Circles Don't Overlap
+
+Then your challenge:
+
+"What should happen if I click Generate three times?"
+
+They can decide whether to remove the old circles.
+
+This teaches:
+
+element.remove()
+
+and state management.
+
+🔥 26. MINI PROJECT 5 — Todo List
+
+End the lecture with the classic project, but don't make it a boring todo list.
+
+UI:
+
+┌─────────────────────────────┐
+│ My Tasks                    │
+│                             │
+│ [ Learn DOM       ] [Add]   │
+│                             │
+│ ☑ Learn JavaScript     ×    │
+│ ☐ Learn DOM            ×    │
+│ ☐ Build Project        ×    │
+│                             │
+│ 2 tasks remaining            │
+└─────────────────────────────┘
+
+Students implement:
+
+Add task
+input
+ ↓
+click Add
+ ↓
+create li
+ ↓
+append
+Complete task
+click task
+ ↓
+toggle class
+Delete
+click ×
+ ↓
+remove element
+Counter
+remaining tasks
+ ↓
+recalculate
+ ↓
+update DOM
+🔥 27. Force Event Delegation Into Todo
+
+This is important.
+
+Don't let them attach:
+
+button.addEventListener(...)
+
+to every dynamically created button.
+
+Instead:
+
+todoList.addEventListener("click", (event) => {
+    // figure out what was clicked
+});
+
+For example:
+
+<li>
+    Learn DOM
+    <button class="delete">X</button>
+</li>
+
+Then:
+
+if (event.target.classList.contains("delete")) {
+    event.target.parentElement.remove();
+}
+
+Now students understand why bubbling and delegation actually matter.
+
+🎯 Suggested Class Flow
+
+If you have around 3 hours, I'd structure it like this:
+
+Time	Topic
+0–10 min	HTML → challenge
+10–25	What is DOM?
+25–40	DevTools DOM exploration
+40–60	Selecting elements
+60–75	Reading/modifying DOM
+75–90	Creating/removing elements
+90–100	Break
+100–115	Events
+115–130	Event object
+130–150	Bubbling
+150–165	Capturing
+165–180	Event delegation
+180–205	Random color/flicker
+205–240	Circle collision
+240–280	Todo list
+280–300	Challenges
+🧠 The "Don't Teach Today" List
+
+I would intentionally avoid going deep into:
+
+window object
+prototype chain
+DOM prototypes
+Document interface internals
+Node inheritance hierarchy
+MutationObserver
+Shadow DOM
+Custom Elements
+Web Components
+Rendering pipeline
+Layout/reflow internals
+
+They'll eventually need these concepts, but not for today's objective.
+
+Today's mental model should simply be:
+
+"The browser turns my HTML into a tree. JavaScript can find nodes in that tree, change them, create new ones, remove them, and react to things users do."
+
+🧪 Final Challenge For Students
+
+Don't end with "okay, that's DOM."
+
+Give them a challenge:
+
+Build a Mini Playground
+
+The page should have:
+
+┌────────────────────────────────────────┐
+│             DOM PLAYGROUND             │
+│                                        │
+│ [Create Circle] [Random Color]         │
+│                                        │
+│                                        │
+│        🔵              🟢              │
+│                                        │
+│                                        │
+│ Click anywhere to create a circle      │
+│                                        │
+│ Circles: 4                             │
+└────────────────────────────────────────┘
+
+Requirements:
+
+Clicking anywhere creates a circle.
+Circle gets random radius.
+Circle gets random color.
+Circle disappears when clicked.
+If more than 5 circles exist, remove the oldest one.
+Show number of circles.
+Detect whether the latest circle overlaps another circle.
+
+Display:
+
+OVERLAP!
+Add a Clear All button.
+Use event delegation somewhere.
+
+They'll need almost everything you've taught:
+
+querySelector
+createElement
+append
+remove
+classList
+style
+addEventListener
+event.target
+bubbling
+event delegation
+Math.random
+Math.sqrt
+arrays
+objects
+Date/logic

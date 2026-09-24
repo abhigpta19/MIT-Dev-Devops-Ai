@@ -1,0 +1,2557 @@
+
+
+```js
+const name = "Abhishek";
+const age = 25;
+const course = "JavaScript";
+const isStudent = true;
+```
+
+But now imagine **100 students**.
+
+We would have:
+
+```js
+const student1Name = "Rahul";
+const student1Age = 20;
+const student1Course = "JavaScript";
+
+const student2Name = "Priya";
+const student2Age = 21;
+const student2Course = "React";
+```
+
+This becomes messy.
+
+Instead:
+
+```js
+const student = {
+    name: "Rahul",
+    age: 20,
+    course: "JavaScript",
+    isStudent: true
+};
+```
+
+This is an **object**.
+
+### Definition
+
+> **An object is a collection of related data and behavior represented using key-value pairs.**
+
+```js
+const student = {
+    name: "Rahul",
+    age: 20,
+    course: "JavaScript"
+};
+```
+
+Visualize it:
+
+```text
+student
+   │
+   ├── name   → "Rahul"
+   ├── age    → 20
+   └── course → "JavaScript"
+```
+
+---
+
+# 2. Object = Key + Value
+
+The fundamental structure:
+
+```js
+const user = {
+    name: "Rahul",
+    age: 22
+};
+```
+
+Here:
+
+```text
+key             value
+ ↓                ↓
+name          → "Rahul"
+age           → 22
+```
+
+The key is also commonly called a **property name**.
+
+```js
+user.name
+```
+
+means:
+
+> Find the `name` property inside `user`.
+
+---
+
+# 3. Objects can contain anything
+
+This is where students should start realizing how powerful objects are.
+
+```js
+const student = {
+    name: "Rahul",
+    age: 20,
+    marks: 95,
+    isPresent: true,
+    hobbies: ["coding", "gaming"],
+    address: {
+        city: "Delhi",
+        pincode: 110001
+    }
+};
+```
+
+An object can contain:
+
+```text
+string
+number
+boolean
+null
+undefined
+array
+object
+function
+...
+```
+
+Example:
+
+```js
+const user = {
+    name: "Rahul",
+
+    address: {
+        city: "Delhi"
+    },
+
+    skills: ["JavaScript", "React"],
+
+    greet: function () {
+        console.log("Hello!");
+    }
+};
+```
+
+---
+
+# 4. Properties vs Methods
+
+This distinction is important.
+
+```js
+const user = {
+    name: "Rahul",
+    age: 20,
+
+    greet() {
+        console.log("Hello");
+    }
+};
+```
+
+`name` and `age` are **properties**.
+
+`greet` is a **method**.
+
+You can explain:
+
+> A method is essentially a function stored as an object property.
+
+---
+
+# 5. Accessing Object Properties
+
+## Dot notation
+
+```js
+const user = {
+    name: "Rahul",
+    age: 20
+};
+
+console.log(user.name);
+console.log(user.age);
+```
+
+Output:
+
+```text
+Rahul
+20
+```
+
+---
+
+## Bracket notation
+
+```js
+console.log(user["name"]);
+console.log(user["age"]);
+```
+
+Output:
+
+```text
+Rahul
+20
+```
+
+Then give them the interesting example:
+
+```js
+const key = "name";
+
+console.log(user[key]);
+```
+
+Output:
+
+```text
+Rahul
+```
+
+But:
+
+```js
+console.log(user.key);
+```
+
+Output:
+
+```text
+undefined
+```
+
+Why?
+
+```js
+user.key
+```
+
+means:
+
+> Find property literally called `"key"`.
+
+Whereas:
+
+```js
+user[key]
+```
+
+means:
+
+> Evaluate `key`, get `"name"`, then find `"name"`.
+
+---
+
+# 6. When bracket notation becomes necessary
+
+This is a great demo.
+
+```js
+const user = {
+    "first-name": "Rahul",
+    age: 20
+};
+```
+
+This won't work:
+
+```js
+user.first-name
+```
+
+JavaScript interprets it differently.
+
+Instead:
+
+```js
+user["first-name"];
+```
+
+---
+
+## Dynamic properties
+
+```js
+const property = "age";
+
+console.log(user[property]);
+```
+
+This becomes extremely useful when working with forms, APIs and dynamic data.
+
+---
+
+# 7. Creating properties
+
+```js
+const user = {
+    name: "Rahul"
+};
+
+user.age = 20;
+
+console.log(user);
+```
+
+Output:
+
+```js
+{
+    name: "Rahul",
+    age: 20
+}
+```
+
+---
+
+# 8. Updating properties
+
+```js
+user.age = 21;
+```
+
+---
+
+# 9. Deleting properties
+
+```js
+delete user.age;
+```
+
+Now:
+
+```js
+console.log(user);
+```
+
+```js
+{
+    name: "Rahul"
+}
+```
+
+---
+
+# 10. Objects and `const`
+
+This is an excellent interview/classroom question.
+
+```js
+const user = {
+    name: "Rahul"
+};
+
+user.name = "Aman";
+```
+
+Allowed.
+
+But:
+
+```js
+user = {
+    name: "Aman"
+};
+```
+
+Not allowed.
+
+Explain:
+
+```text
+const
+ ↓
+prevents reassignment of the variable
+
+NOT
+
+prevents modification of the object
+```
+
+---
+
+# 11. Primitive vs Non-Primitive
+
+Now transition into the core.
+
+JavaScript values are commonly divided into:
+
+```text
+Primitive
+Non-Primitive / Reference
+```
+
+### Primitive types
+
+```text
+string
+number
+boolean
+undefined
+null
+bigint
+symbol
+```
+
+Example:
+
+```js
+let a = 10;
+let b = a;
+
+b = 20;
+
+console.log(a);
+console.log(b);
+```
+
+Output:
+
+```text
+10
+20
+```
+
+Why?
+
+`b` received the value `10`.
+
+Conceptually:
+
+```text
+a → 10
+
+b → 10
+```
+
+Then:
+
+```text
+b → 20
+```
+
+doesn't affect `a`.
+
+---
+
+# 12. Objects behave differently
+
+```js
+const user1 = {
+    name: "Rahul"
+};
+
+const user2 = user1;
+
+user2.name = "Aman";
+
+console.log(user1.name);
+console.log(user2.name);
+```
+
+Output:
+
+```text
+Aman
+Aman
+```
+
+Students usually go:
+
+> "WHAT?!"
+
+That's the perfect moment.
+
+---
+
+# 13. The Reference Mental Model
+
+Don't simply say:
+
+> Objects are stored in heap.
+
+That's an oversimplification.
+
+Instead teach the useful mental model:
+
+```js
+const user1 = {
+    name: "Rahul"
+};
+
+const user2 = user1;
+```
+
+Think:
+
+```text
+user1 ────────┐
+              ↓
+          ┌─────────────┐
+          │ name: Rahul │
+          └─────────────┘
+              ↑
+user2 ────────┘
+```
+
+Both variables refer to the **same object**.
+
+Therefore:
+
+```js
+user2.name = "Aman";
+```
+
+changes the same object.
+
+---
+
+# 14. Equality with Objects
+
+Another excellent demo:
+
+```js
+const a = {
+    name: "Rahul"
+};
+
+const b = {
+    name: "Rahul"
+};
+
+console.log(a === b);
+```
+
+Output:
+
+```text
+false
+```
+
+Why?
+
+Because these are two different objects.
+
+```text
+a → Object #1
+
+b → Object #2
+```
+
+Even though their contents are identical.
+
+But:
+
+```js
+const a = {
+    name: "Rahul"
+};
+
+const b = a;
+
+console.log(a === b);
+```
+
+Output:
+
+```text
+true
+```
+
+Because:
+
+```text
+a ──┐
+    ↓
+ Object #1
+    ↑
+b ──┘
+```
+
+---
+
+# 15. Arrays are Objects
+
+This is where the lecture gets interesting.
+
+```js
+const arr = [10, 20, 30];
+```
+
+Ask:
+
+> Is this an object?
+
+```js
+console.log(typeof arr);
+```
+
+Output:
+
+```text
+object
+```
+
+Because arrays are objects.
+
+Conceptually:
+
+```js
+arr[0]
+arr[1]
+arr[2]
+```
+
+Arrays use indexed properties.
+
+You can demonstrate:
+
+```js
+const arr = ["A", "B", "C"];
+
+console.log(arr[0]);
+```
+
+Output:
+
+```text
+A
+```
+
+And:
+
+```js
+arr.name = "Students";
+
+console.log(arr.name);
+```
+
+It technically works.
+
+```js
+console.log(arr);
+```
+
+The array is still an object with special array behavior.
+
+But teach students:
+
+> Although arrays are objects internally, we use arrays specifically for ordered collections.
+
+---
+
+# 16. The famous `typeof` demo
+
+Put this on the screen:
+
+```js
+console.log(typeof "hello");
+console.log(typeof 10);
+console.log(typeof true);
+console.log(typeof undefined);
+console.log(typeof {});
+console.log(typeof []);
+console.log(typeof function () {});
+console.log(typeof null);
+```
+
+Output:
+
+```text
+string
+number
+boolean
+undefined
+object
+object
+function
+object
+```
+
+Then:
+
+> "JavaScript has some historical weirdness."
+
+Especially:
+
+```js
+typeof null
+```
+
+returns:
+
+```text
+"object"
+```
+
+This is a famous JavaScript legacy quirk.
+
+---
+
+# 17. Functions are Objects
+
+This is another beautiful demo.
+
+```js
+function greet() {
+    console.log("Hello");
+}
+
+greet.language = "JavaScript";
+
+console.log(greet.language);
+```
+
+Output:
+
+```text
+JavaScript
+```
+
+Functions can have properties!
+
+```js
+function greet() {}
+
+greet.version = 1;
+greet.author = "Rahul";
+
+console.log(greet.version);
+```
+
+So:
+
+> Functions are callable objects.
+
+This distinction is useful:
+
+```text
+Object
+  ↓
+stores data
+
+Function
+  ↓
+object + callable behavior
+```
+
+---
+
+# 18. Nested Objects
+
+```js
+const student = {
+    name: "Rahul",
+
+    address: {
+        city: "Delhi",
+        country: "India"
+    }
+};
+```
+
+Access:
+
+```js
+console.log(student.address.city);
+```
+
+Output:
+
+```text
+Delhi
+```
+
+---
+
+# 19. Nested Arrays + Objects
+
+Real-world JSON looks like this:
+
+```js
+const response = {
+    success: true,
+
+    data: {
+        users: [
+            {
+                id: 1,
+                name: "Rahul"
+            },
+            {
+                id: 2,
+                name: "Priya"
+            }
+        ]
+    }
+};
+```
+
+Access:
+
+```js
+console.log(response.data.users[0].name);
+```
+
+Output:
+
+```text
+Rahul
+```
+
+Tell students:
+
+> This is basically the structure you'll deal with every day in frontend/backend development.
+
+---
+
+# 20. Object Destructuring
+
+Now introduce a very important modern syntax.
+
+Instead of:
+
+```js
+const user = {
+    name: "Rahul",
+    age: 20
+};
+
+const name = user.name;
+const age = user.age;
+```
+
+We can write:
+
+```js
+const { name, age } = user;
+```
+
+Now:
+
+```js
+console.log(name);
+console.log(age);
+```
+
+Output:
+
+```text
+Rahul
+20
+```
+
+---
+
+# 21. Destructuring with different variable names
+
+```js
+const user = {
+    name: "Rahul"
+};
+
+const { name: userName } = user;
+
+console.log(userName);
+```
+
+Output:
+
+```text
+Rahul
+```
+
+Syntax:
+
+```js
+const { originalProperty: newVariable } = object;
+```
+
+---
+
+# 22. Default values
+
+```js
+const user = {
+    name: "Rahul"
+};
+
+const { name, age = 18 } = user;
+
+console.log(name);
+console.log(age);
+```
+
+Output:
+
+```text
+Rahul
+18
+```
+
+Important:
+
+```js
+age = 18
+```
+
+is used only when `age` is `undefined`.
+
+---
+
+# 23. Nested destructuring
+
+```js
+const user = {
+    name: "Rahul",
+    address: {
+        city: "Delhi",
+        pincode: 110001
+    }
+};
+```
+
+You can do:
+
+```js
+const {
+    address: { city, pincode }
+} = user;
+
+console.log(city);
+console.log(pincode);
+```
+
+Output:
+
+```text
+Delhi
+110001
+```
+
+---
+
+# 24. Function parameters + destructuring
+
+Extremely common in React.
+
+Instead of:
+
+```js
+function greet(user) {
+    console.log(user.name);
+    console.log(user.age);
+}
+```
+
+You can write:
+
+```js
+function greet({ name, age }) {
+    console.log(name);
+    console.log(age);
+}
+```
+
+Then:
+
+```js
+greet({
+    name: "Rahul",
+    age: 20
+});
+```
+
+---
+
+# 25. Spread Operator
+
+Now introduce:
+
+```js
+...
+```
+
+Same syntax, different contexts.
+
+For objects:
+
+```js
+const user = {
+    name: "Rahul",
+    age: 20
+};
+
+const copy = {
+    ...user
+};
+```
+
+Conceptually:
+
+```text
+user
+ ↓
+{ name: "Rahul", age: 20 }
+
+spread
+ ↓
+
+{ name: "Rahul", age: 20 }
+```
+
+---
+
+# 26. Object merging
+
+```js
+const basic = {
+    name: "Rahul"
+};
+
+const details = {
+    age: 20,
+    course: "JavaScript"
+};
+
+const student = {
+    ...basic,
+    ...details
+};
+```
+
+Output:
+
+```js
+{
+    name: "Rahul",
+    age: 20,
+    course: "JavaScript"
+}
+```
+
+---
+
+# 27. Duplicate properties
+
+This is an important demo.
+
+```js
+const user = {
+    name: "Rahul",
+    age: 20
+};
+
+const updatedUser = {
+    ...user,
+    age: 21
+};
+```
+
+Output:
+
+```js
+{
+    name: "Rahul",
+    age: 21
+}
+```
+
+Later properties overwrite earlier ones.
+
+```js
+const updatedUser = {
+    age: 21,
+    ...user
+};
+```
+
+Now:
+
+```js
+{
+    name: "Rahul",
+    age: 20
+}
+```
+
+This is heavily used in React state updates.
+
+---
+
+# 28. Spread is NOT deep copy
+
+This is extremely important.
+
+```js
+const user = {
+    name: "Rahul",
+
+    address: {
+        city: "Delhi"
+    }
+};
+
+const copy = {
+    ...user
+};
+
+copy.address.city = "Mumbai";
+
+console.log(user.address.city);
+```
+
+Output:
+
+```text
+Mumbai
+```
+
+Why?
+
+Because spread only copies the **first level**.
+
+Visual:
+
+```text
+user ───────────────┐
+                    ↓
+             address object
+                    ↑
+copy ───────────────┘
+```
+
+---
+
+# 29. Shallow Copy
+
+Definition:
+
+> A shallow copy copies the outer object but preserves references to nested objects.
+
+Example:
+
+```js
+const original = {
+    name: "Rahul",
+    address: {
+        city: "Delhi"
+    }
+};
+
+const copy = { ...original };
+```
+
+Now:
+
+```text
+original ──→ address ←── copy
+```
+
+But:
+
+```text
+original !== copy
+```
+
+while:
+
+```text
+original.address === copy.address
+```
+
+Demo:
+
+```js
+console.log(original === copy);
+console.log(original.address === copy.address);
+```
+
+Output:
+
+```text
+false
+true
+```
+
+This is a fantastic classroom demo.
+
+---
+
+# 30. Deep Copy
+
+A deep copy means:
+
+> Nested objects are also copied into independent objects.
+
+Modern JavaScript provides:
+
+```js
+structuredClone()
+```
+
+Example:
+
+```js
+const original = {
+    name: "Rahul",
+    address: {
+        city: "Delhi"
+    }
+};
+
+const copy = structuredClone(original);
+
+copy.address.city = "Mumbai";
+
+console.log(original.address.city);
+console.log(copy.address.city);
+```
+
+Output:
+
+```text
+Delhi
+Mumbai
+```
+
+Now:
+
+```js
+console.log(original.address === copy.address);
+```
+
+Output:
+
+```text
+false
+```
+
+---
+
+# 31. `JSON.parse(JSON.stringify())`
+
+Students will see this old technique everywhere.
+
+```js
+const copy = JSON.parse(
+    JSON.stringify(original)
+);
+```
+
+It can work for simple JSON-compatible data.
+
+But it has limitations.
+
+For example:
+
+```js
+const obj = {
+    date: new Date(),
+    value: undefined,
+    fn: function () {}
+};
+```
+
+JSON serialization doesn't preserve all JavaScript types/values correctly.
+
+So teach:
+
+> For general structured data, prefer `structuredClone()` when its supported data types fit your needs.
+
+---
+
+# 32. Rest Operator
+
+The same `...` syntax appears in destructuring.
+
+```js
+const user = {
+    name: "Rahul",
+    age: 20,
+    city: "Delhi"
+};
+
+const { name, ...rest } = user;
+
+console.log(name);
+console.log(rest);
+```
+
+Output:
+
+```text
+Rahul
+
+{
+    age: 20,
+    city: "Delhi"
+}
+```
+
+Important distinction:
+
+```text
+... on right side → spread
+
+... inside destructuring → rest
+```
+
+---
+
+# 33. Rest with arrays
+
+```js
+const numbers = [10, 20, 30, 40];
+
+const [first, ...remaining] = numbers;
+
+console.log(first);
+console.log(remaining);
+```
+
+Output:
+
+```text
+10
+[20, 30, 40]
+```
+
+---
+
+# 34. Object.keys()
+
+```js
+const user = {
+    name: "Rahul",
+    age: 20,
+    city: "Delhi"
+};
+
+console.log(Object.keys(user));
+```
+
+Output:
+
+```js
+["name", "age", "city"]
+```
+
+---
+
+# 35. Object.values()
+
+```js
+console.log(Object.values(user));
+```
+
+Output:
+
+```js
+["Rahul", 20, "Delhi"]
+```
+
+---
+
+# 36. Object.entries()
+
+This one is extremely useful.
+
+```js
+console.log(Object.entries(user));
+```
+
+Output:
+
+```js
+[
+    ["name", "Rahul"],
+    ["age", 20],
+    ["city", "Delhi"]
+]
+```
+
+Then:
+
+```js
+Object.entries(user).forEach(([key, value]) => {
+    console.log(key, value);
+});
+```
+
+Output:
+
+```text
+name Rahul
+age 20
+city Delhi
+```
+
+This connects perfectly with destructuring.
+
+---
+
+# 37. `for...in`
+
+```js
+for (const key in user) {
+    console.log(key, user[key]);
+}
+```
+
+Output:
+
+```text
+name Rahul
+age 20
+city Delhi
+```
+
+Explain why:
+
+```js
+user[key]
+```
+
+instead of:
+
+```js
+user.key
+```
+
+because `key` is a variable.
+
+---
+
+# 38. Optional Chaining
+
+This is extremely important in modern JavaScript.
+
+Suppose:
+
+```js
+const user = {
+    name: "Rahul"
+};
+```
+
+This can crash:
+
+```js
+console.log(user.address.city);
+```
+
+because:
+
+```text
+user.address
+```
+
+is `undefined`.
+
+Instead:
+
+```js
+console.log(user.address?.city);
+```
+
+Output:
+
+```text
+undefined
+```
+
+---
+
+# 39. Optional chaining with functions
+
+```js
+user.sayHello?.();
+```
+
+Meaning:
+
+> If `sayHello` exists and is callable, invoke it.
+
+---
+
+# 40. Nullish Coalescing
+
+Another modern operator:
+
+```js
+const username = user.name ?? "Guest";
+```
+
+Meaning:
+
+> If the left side is `null` or `undefined`, use the right side.
+
+Compare:
+
+```js
+0 || 100
+```
+
+Output:
+
+```text
+100
+```
+
+but:
+
+```js
+0 ?? 100
+```
+
+Output:
+
+```text
+0
+```
+
+This is an important distinction.
+
+---
+
+# 41. Object.freeze()
+
+```js
+const user = {
+    name: "Rahul"
+};
+
+Object.freeze(user);
+
+user.name = "Aman";
+
+console.log(user.name);
+```
+
+In strict mode, mutation attempts can throw; otherwise they are ignored.
+
+Explain:
+
+> `freeze()` prevents modifications to the object's own properties, but it is shallow.
+
+Example:
+
+```js
+const user = {
+    address: {
+        city: "Delhi"
+    }
+};
+
+Object.freeze(user);
+
+user.address.city = "Mumbai";
+```
+
+Nested object can still be modified because `freeze()` is shallow.
+
+---
+
+# 42. Object.seal()
+
+```js
+Object.seal(user);
+```
+
+Sealing prevents:
+
+```text
+adding properties
+deleting properties
+```
+
+but existing properties can generally still be changed.
+
+---
+
+# 43. Property existence
+
+```js
+const user = {
+    name: "Rahul"
+};
+
+console.log("name" in user);
+```
+
+Output:
+
+```text
+true
+```
+
+Also:
+
+```js
+console.log(Object.hasOwn(user, "name"));
+```
+
+Output:
+
+```text
+true
+```
+
+Useful distinction:
+
+> `in` checks the object and its prototype chain; `Object.hasOwn()` checks an own property.
+
+You don't need to deep-dive into prototypes today unless you want to continue the object lecture into JavaScript's object model.
+
+---
+
+# 44. Computed Property Names
+
+This is a very useful modern syntax.
+
+```js
+const key = "name";
+
+const user = {
+    [key]: "Rahul"
+};
+
+console.log(user);
+```
+
+Output:
+
+```js
+{
+    name: "Rahul"
+}
+```
+
+Another example:
+
+```js
+const field = "email";
+
+const value = "rahul@gmail.com";
+
+const user = {
+    [field]: value
+};
+```
+
+---
+
+# 45. Property shorthand
+
+Instead of:
+
+```js
+const name = "Rahul";
+const age = 20;
+
+const user = {
+    name: name,
+    age: age
+};
+```
+
+write:
+
+```js
+const user = {
+    name,
+    age
+};
+```
+
+Very common in modern JS.
+
+---
+
+# 46. Method shorthand
+
+Instead of:
+
+```js
+const user = {
+    greet: function () {
+        console.log("Hello");
+    }
+};
+```
+
+write:
+
+```js
+const user = {
+    greet() {
+        console.log("Hello");
+    }
+};
+```
+
+---
+
+# 47. Real-world example: E-commerce
+
+Now combine everything.
+
+```js
+const product = {
+    id: 101,
+    name: "MacBook Pro",
+    price: 150000,
+
+    seller: {
+        name: "Apple",
+        country: "USA"
+    },
+
+    tags: [
+        "laptop",
+        "apple",
+        "macbook"
+    ],
+
+    isAvailable: true,
+
+    getPrice() {
+        return this.price;
+    }
+};
+```
+
+Now ask students:
+
+```js
+product.name
+product.seller.country
+product.tags[1]
+product.getPrice()
+```
+
+Outputs:
+
+```text
+MacBook Pro
+USA
+apple
+150000
+```
+
+---
+
+# 48. Introduce `this` briefly
+
+Inside:
+
+```js
+const user = {
+    name: "Rahul",
+
+    greet() {
+        console.log(this.name);
+    }
+};
+
+user.greet();
+```
+
+Output:
+
+```text
+Rahul
+```
+
+You can say:
+
+> We'll have a dedicated lecture on `this`, prototypes and classes. For now, understand that `this` inside this method refers to the object through which the method is called in this example.
+
+Don't derail the object lecture with the entire `this` model.
+
+---
+
+# 49. The BIG mental model
+
+At this point put this on the board:
+
+```text
+                 JAVASCRIPT VALUES
+                        │
+              ┌─────────┴─────────┐
+              │                   │
+         PRIMITIVES            OBJECTS
+              │                   │
+     ┌────────┼────────┐     ┌────┼──────────┐
+     │        │        │     │    │          │
+   string   number   boolean array function  object
+     │
+ undefined
+ null
+ bigint
+ symbol
+```
+
+Then:
+
+```text
+Array       → Object
+Function    → Object
+Date        → Object
+RegExp      → Object
+Map         → Object
+Set         → Object
+```
+
+But remember:
+
+```js
+typeof function () {}
+```
+
+returns:
+
+```text
+"function"
+```
+
+because JavaScript specifically reports functions that way.
+
+---
+
+# 50. The Object Copying Master Demo
+
+This is probably the most valuable demo of the entire lecture.
+
+Run this live:
+
+```js
+const original = {
+    name: "Rahul",
+
+    address: {
+        city: "Delhi"
+    }
+};
+
+const a = original;
+
+const b = { ...original };
+
+const c = structuredClone(original);
+```
+
+Now:
+
+```js
+console.log(original === a);
+console.log(original === b);
+console.log(original === c);
+
+console.log(original.address === a.address);
+console.log(original.address === b.address);
+console.log(original.address === c.address);
+```
+
+Output:
+
+```text
+true
+false
+false
+
+true
+true
+false
+```
+
+Then explain:
+
+```text
+a
+ ↓
+SAME OBJECT
+
+b
+ ↓
+NEW OUTER OBJECT
+     ↓
+SAME NESTED OBJECT
+
+c
+ ↓
+NEW OUTER OBJECT
+     ↓
+NEW NESTED OBJECT
+```
+
+That one example gives them the complete mental model.
+
+---
+
+# 51. Object mutation vs immutability
+
+This is particularly important for React.
+
+### Mutation
+
+```js
+const user = {
+    name: "Rahul"
+};
+
+user.name = "Aman";
+```
+
+Same object modified.
+
+### New object
+
+```js
+const updatedUser = {
+    ...user,
+    name: "Aman"
+};
+```
+
+Now:
+
+```text
+user       → old object
+
+updatedUser → new object
+```
+
+This is the pattern they'll see everywhere in React.
+
+---
+
+# 52. Common Object Mistakes
+
+### Mistake 1
+
+```js
+const a = {};
+const b = {};
+
+console.log(a === b);
+```
+
+Output:
+
+```text
+false
+```
+
+---
+
+### Mistake 2
+
+```js
+const a = {};
+const b = a;
+
+b.x = 10;
+
+console.log(a.x);
+```
+
+Output:
+
+```text
+10
+```
+
+---
+
+### Mistake 3
+
+```js
+const user = {
+    name: "Rahul"
+};
+
+const key = "name";
+
+console.log(user.key);
+```
+
+Output:
+
+```text
+undefined
+```
+
+Correct:
+
+```js
+console.log(user[key]);
+```
+
+---
+
+### Mistake 4
+
+```js
+const user = {
+    age: 0
+};
+
+console.log(user.age || 18);
+```
+
+Output:
+
+```text
+18
+```
+
+But:
+
+```js
+console.log(user.age ?? 18);
+```
+
+Output:
+
+```text
+0
+```
+
+---
+
+# 53. Classroom Challenge #1
+
+Ask them to predict everything **before running**:
+
+```js
+const user1 = {
+    name: "Rahul",
+    address: {
+        city: "Delhi"
+    }
+};
+
+const user2 = user1;
+
+user2.name = "Aman";
+user2.address.city = "Mumbai";
+
+console.log(user1);
+console.log(user2);
+console.log(user1 === user2);
+```
+
+Expected:
+
+```js
+{
+    name: "Aman",
+    address: {
+        city: "Mumbai"
+    }
+}
+```
+
+and:
+
+```text
+true
+```
+
+---
+
+# 54. Classroom Challenge #2
+
+```js
+const user = {
+    name: "Rahul",
+    age: 20
+};
+
+const copy = {
+    ...user,
+    age: 25
+};
+
+console.log(user);
+console.log(copy);
+```
+
+Ask:
+
+> Did `user.age` change?
+
+Answer:
+
+```text
+No.
+
+user.age   → 20
+copy.age   → 25
+```
+
+---
+
+# 55. Classroom Challenge #3
+
+```js
+const user = {
+    name: "Rahul",
+    address: {
+        city: "Delhi"
+    }
+};
+
+const copy = {
+    ...user
+};
+
+copy.address.city = "Mumbai";
+
+console.log(user.address.city);
+```
+
+Answer:
+
+```text
+Mumbai
+```
+
+Then ask:
+
+> Why didn't spread protect us?
+
+Because:
+
+```text
+spread = shallow copy
+```
+
+---
+
+# 56. Classroom Challenge #4 — Destructuring
+
+```js
+const student = {
+    name: "Rahul",
+    age: 21,
+    course: "MERN"
+};
+
+const {
+    name,
+    course: subject
+} = student;
+
+console.log(name);
+console.log(subject);
+```
+
+Output:
+
+```text
+Rahul
+MERN
+```
+
+---
+
+# 57. Classroom Challenge #5 — Rest
+
+```js
+const user = {
+    name: "Rahul",
+    age: 20,
+    city: "Delhi",
+    country: "India"
+};
+
+const { name, ...details } = user;
+
+console.log(name);
+console.log(details);
+```
+
+Output:
+
+```text
+Rahul
+
+{
+    age: 20,
+    city: "Delhi",
+    country: "India"
+}
+```
+
+---
+
+# 58. Classroom Challenge #6 — Array is Object
+
+```js
+const arr = [10, 20, 30];
+
+console.log(typeof arr);
+console.log(arr.length);
+console.log(arr[0]);
+```
+
+Output:
+
+```text
+object
+3
+10
+```
+
+Then ask:
+
+> Why does `arr.length` work?
+
+Because the array is an object with properties and special array behavior.
+
+---
+
+# 59. Classroom Challenge #7 — Function as Object
+
+```js
+function add(a, b) {
+    return a + b;
+}
+
+add.author = "Rahul";
+add.version = 1;
+
+console.log(add(2, 3));
+console.log(add.author);
+console.log(add.version);
+```
+
+Output:
+
+```text
+5
+Rahul
+1
+```
+
+---
+
+# 60. Final Practice Set
+
+Give students these without solutions first.
+
+### Q1
+
+Predict:
+
+```js
+const a = { x: 10 };
+const b = a;
+
+b.x = 20;
+
+console.log(a.x);
+```
+
+---
+
+### Q2
+
+```js
+const a = { x: 10 };
+const b = { x: 10 };
+
+console.log(a === b);
+```
+
+---
+
+### Q3
+
+```js
+const user = {
+    name: "Rahul",
+    age: 20
+};
+
+const { name, age } = user;
+
+console.log(name, age);
+```
+
+---
+
+### Q4
+
+```js
+const user = {
+    name: "Rahul"
+};
+
+const { age = 18 } = user;
+
+console.log(age);
+```
+
+---
+
+### Q5
+
+```js
+const a = {
+    user: {
+        name: "Rahul"
+    }
+};
+
+const b = {
+    ...a
+};
+
+b.user.name = "Aman";
+
+console.log(a.user.name);
+```
+
+---
+
+### Q6
+
+```js
+console.log(typeof []);
+console.log(typeof {});
+console.log(typeof function(){});
+console.log(typeof null);
+```
+
+---
+
+### Q7
+
+```js
+const user = {
+    name: "Rahul",
+    age: 20
+};
+
+const key = "name";
+
+console.log(user.key);
+console.log(user[key]);
+```
+
+---
+
+### Q8
+
+```js
+const user = {
+    name: "Rahul",
+    age: 20
+};
+
+const updated = {
+    ...user,
+    age: 25
+};
+
+console.log(user.age);
+console.log(updated.age);
+```
+
+---
+
+### Q9
+
+```js
+const user = {
+    name: "Rahul",
+    city: "Delhi",
+    age: 20
+};
+
+const { name, ...rest } = user;
+
+console.log(name);
+console.log(rest);
+```
+
+---
+
+### Q10 — Advanced
+
+```js
+const original = {
+    name: "Rahul",
+    address: {
+        city: "Delhi"
+    }
+};
+
+const a = original;
+const b = { ...original };
+const c = structuredClone(original);
+
+console.log(original === a);
+console.log(original === b);
+console.log(original === c);
+
+console.log(original.address === a.address);
+console.log(original.address === b.address);
+console.log(original.address === c.address);
+```
+
+Ask them to predict **all six outputs** before running it.
+
+---
+
+# The final story I would leave them with
+
+End the class with this:
+
+```text
+                 OBJECT
+                   │
+          collection of properties
+                   │
+          ┌────────┴────────┐
+          ↓                 ↓
+        values           functions
+          │                 │
+       property          method
+```
+
+Then:
+
+```text
+JavaScript
+│
+├── Primitive values
+│
+└── Objects
+     │
+     ├── Plain objects
+     ├── Arrays
+     ├── Functions
+     ├── Dates
+     ├── Maps
+     ├── Sets
+     └── many built-in objects
+```
+
+And the **three rules students absolutely must remember**:
+
+### Rule 1
+
+```js
+const a = object;
+```
+
+doesn't create a new object.
+
+It creates another reference to the same object.
+
+### Rule 2
+
+```js
+const copy = { ...object };
+```
+
+creates a **shallow copy**, not a deep copy.
+
+### Rule 3
+
+```js
+const { name } = user;
+```
+
+is destructuring, while:
+
+```js
+const copy = { ...user };
+```
+
+is spreading.
+
+---
+
+## Suggested teaching flow for your actual class
+
+Don't present all 60 sections as a continuous lecture. Make it interactive:
+
+**Part 1 — 20 min**
+
+```text
+What is an object?
+↓
+Key/value
+↓
+Properties
+↓
+Methods
+↓
+Dot/bracket notation
+```
+
+**Part 2 — 20 min**
+
+```text
+Primitive
+↓
+Object
+↓
+Reference
+↓
+Equality
+↓
+Arrays are objects
+↓
+Functions are objects
+```
+
+**Part 3 — 25 min**
+
+```text
+Destructuring
+↓
+Spread
+↓
+Rest
+↓
+Shallow copy
+↓
+Deep copy
+```
+
+**Part 4 — 15 min**
+
+```text
+Object.keys
+Object.values
+Object.entries
+for...in
+optional chaining
+??
+freeze/seal
+```
+
+**Part 5 — 20 min**
+
+Give them the prediction challenges and **don't let them run the code until everyone has written an answer**.
+
+That will make the lesson much more memorable than simply explaining object syntax.
