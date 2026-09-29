@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #box{
+            height: 100px;
+            width: 100px;
+            border: 2px solid black;
+            border-radius: 1%;
+        }
+        *{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+</body>
+<script>
+    document.addEventListener("click",function(e){
+        let x = e.clientX;
+        let y = e.clientY;
+
+        let mini = 30;
+        let maxi = 150;
+        let r = mini + Math.random()*(maxi-mini);
+
+        const circle = document.createElement("div");
+        circle.style.height = `${2*r}px`
+        circle.style.width = `${2*r}px`
+        circle.style.border = "2px solid black";
+        circle.style.marginLeft = `${x-r}px`;
+        circle.style.marginTop = `${y-r}px`;
+        circle.style.borderRadius = "50%";
+        circle.style.position = "absolute";
+
+        document.body.append(circle);
+    
+        console.log(x,y,r);
+    })
+</script>
+</html>

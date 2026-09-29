@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    div{
+        margin: 50px;
+        padding: 50px;
+        border: 2px solid black;
+    }
+</style>
+<body>
+    <div class="grand">
+        <h1>grandfather</h1>
+        <div class="father">
+            <h1>father</h1>
+            <div class="child">
+                <h1>child</h1>
+            </div>
+        </div>
+    </div>
+    <script>
+        
+
+        const child = document.getElementsByClassName("child")[0];
+        child.addEventListener("click",function(e){
+            alert("capturing child clicked"); 
+        })
+
+        const father = document.getElementsByClassName("father")[0];
+        father.addEventListener("click",function(e){
+            alert("bubbling father clicked");
+        })
+
+        const grand = document.getElementsByClassName("grand")[0];
+        grand.addEventListener("click",function(e){
+            alert("capturing grandfather clicked");
+        },true)
+
+
+        // element.addEventListener(eventname, fn, );
+
+    </script>
+</body>
+</html>
+
+
+<!-- {
+    type: "MousePointer",
+    target: :btn,
+    xcord: 
+    ycpord
+} -->

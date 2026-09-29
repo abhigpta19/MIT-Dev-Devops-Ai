@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .container{
+        display: flex;
+        justify-content: space-between;
+    }
+    .box{
+        height: 100px;
+        width: 100px;
+        border: 2px solid black;
+        background-color: rgb(127,65,12);
+        border-radius: 50%;
+    }
+</style>
+<body>
+    <div class="container">
+        <div class="box">box1</div>
+        <div class="box">box2</div>
+        <div class="box">box3</div>
+        <div class="box">box4</div>
+        <div class="box">box5</div>
+    </div>
+    <script>
+
+        function changeColor()
+        {
+            const boxes = document.getElementsByClassName("box");
+            for(let i=0;i<5;i++)
+            {
+                let r = Math.floor(Math.random()*255);
+                let g = Math.floor(Math.random()*255);
+                let b = Math.floor(Math.random()*255);
+
+                let color = `rgb(${r},${g},${b})`;
+                boxes[i].style.backgroundColor = color;
+            }
+        }
+
+   setInterval(changeColor,1000);
+
+    
+        
+        // console.log(r,g,b)
+
+        // // 30 - 100;
+        // let mini = 30;
+        // let maxi = 100;
+
+        // let num = mini + Math.random()*(maxi-mini);
+
+    </script>
+</body>
+</html>

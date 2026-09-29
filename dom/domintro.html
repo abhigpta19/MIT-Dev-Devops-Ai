@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .darkmode{
+            color: white;
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div id="firstdiv">
+            <h1 id="head">this is a heading</h1>
+            <p>this is a para</p>
+        </div>
+        <div class="container">
+            <div class="box">box1</div>
+            <div class="box">box2</div>
+            <div class="box">box3</div>
+        </div>
+        <input type="text" id="inputarea">
+        <button id="modebtn">Dark</button>
+    </div>
+    
+    <script>
+        const div4 = document.createElement("div")
+        div4.innerText = "box4";
+
+        const cont = document.getElementsByClassName("container")[0];
+
+        const box2 = document.getElementsByClassName("box")[1]
+
+
+        const root = document.getElementById("root");
+        const btn = document.getElementById("modebtn");
+        const heading = document.getElementById("head");
+        const inputarea = document.getElementById("inputarea");
+        
+        function changeMode(e)
+        {
+            console.log(e);
+            root.classList.toggle("darkmode");
+            btn.innerText = "Light";
+        }
+
+        function handleInput(e)
+        {
+            console.log(e.target.value);
+        }
+
+        
+        heading.addEventListener("click",changeMode);
+        inputarea.addEventListener("input",handleInput);
+        // document.removeEventListener
+
+    </script>
+</body>
+</html>
+
+<!-- document={
+    html: {
+        head:{
+            meta1 :{},
+            meta2: {},
+            title: {}
+        },
+        body:{
+            children: [{},{
+                children:[{},{},{
+                    innerText: "box3"
+                }]
+            }]
+        }
+    }
+} 
+
+{
+    tagName: "h1",
+    innerText: "this is a heading",
+    id: "head",
+    style: {
+        color: "red",
+        backgrounColor : "aqua",
+        border: "2px solid black"
+    }
+        //getelementby tag, query selector, query selectore all
+} -->
+
+

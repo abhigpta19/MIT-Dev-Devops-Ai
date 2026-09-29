@@ -5,22 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
         div{
-            border: 2px solid black;
-            height: 100px;
-            width : 100px;
-            border-radius: 10%;
-            margin-left: 20px;
-            margin-top: 20px;
+            position: absolute;
         }
     </style>
 </head>
 <body>
-    <div></div>
-    <!-- <script>
-        document.addEventListener("click",(e)=>{
-            console.log(e.clientX, e.clientY);
+    <div id="container">
+    </div>
+    <script>
+        document.addEventListener("click",function(e){
+            let x = e.clientX;
+            let y = e.clientY;
+
+            let mini = 30;
+            let maxi = 100;
+
+            let r = mini + Math.random()*(maxi-mini);
+
+            let ml = x-r;
+            let mt = y-r;
+
+            let box = document.createElement("div");
+            box.style.height = `${2*r}px`;
+            box.style.width = `${2*r}px`;
+            box.style.border= "2px solid black";
+            box.style.borderRadius = "50%";
+            box.style.marginLeft = `${ml}px`;
+            box.style.marginTop = `${mt}px`;
+
+            const container = document.getElementById("container");
+            container.append(box)
         })
-    </script> -->
+    </script>
 </body>
 </html>

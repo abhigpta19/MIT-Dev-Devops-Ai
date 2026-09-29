@@ -1,0 +1,16 @@
+{
+  "name": "abhigupta-mathlib-demo",
+  "version": "1.1.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "abhigupta-mathlib-demo": "^1.1.0"
+  }
+}

@@ -346,33 +346,33 @@
 //foreach for-in
 
 
-function report(s1)
-{
-    // const name = s1.name;
-    // const roll = s1.roll;
-    const {name,roll} = s1;
-    // const phy = s1.marks.phy;
-    // const chem = s1.marks.chem;
-    // const maths = s1.marks.maths;
-    const {phy,chem,maths} = s1.marks;
+// function report(s1)
+// {
+//     // const name = s1.name;
+//     // const roll = s1.roll;
+//     const {name,roll} = s1;
+//     // const phy = s1.marks.phy;
+//     // const chem = s1.marks.chem;
+//     // const maths = s1.marks.maths;
+//     const {phy,chem,maths} = s1.marks;
 
-    const percent = ((phy+chem+maths)/300)*100.00;
-    console.log(`Hi! ${name} and roll no ${roll} your percentage is ${percent}`);
+//     const percent = ((phy+chem+maths)/300)*100.00;
+//     console.log(`Hi! ${name} and roll no ${roll} your percentage is ${percent}`);
 
-}
+// }
 
 
-let s1 = {
-    name: "Abhi",
-    roll: 1,
-    marks: {
-        phy: 80,
-        chem: 70,
-        maths: 90
-    }
-}
+// let s1 = {
+//     name: "Abhi",
+//     roll: 1,
+//     marks: {
+//         phy: 80,
+//         chem: 70,
+//         maths: 90
+//     }
+// }
 
-report(s1);
+// report(s1);
 
 // let name = "abhi";
 // let batch = "AI";
@@ -386,6 +386,19 @@ report(s1);
 //delete
 //rest
 //destructuring in array
+
+
+// const obj = {
+//     name: "Abhi",
+//     gpa: [7.8,8.9],
+//     greet: function(){
+//         console.log("hello");
+//     }
+// }
+
+// obj.greet();
+
+
 
 
 
