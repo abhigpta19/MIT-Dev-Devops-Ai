@@ -1,0 +1,401 @@
+
+For the examples, create a folder and run them using Node.js.
+mkdir node-modules-demo
+cd node-modules-demo
+npm init -y
+We'll use CommonJS syntax to keep the examples simple.
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
+2. The fs module
+fs stands for File System. It lets Node.js interact with files and directories on your computer.
+A. Writing to a file
+fs.writeFileSync()
+Creates a file if it doesn't exist, or overwrites its contents if it already exists.
+const fs = require("fs");
+
+fs.writeFileSync("hello.txt", "Hello students!");
+
+console.log("File created");
+After running the code, hello.txt contains:
+Hello students!
+fs.writeFile()
+The asynchronous version of file writing.
+const fs = require("fs");
+
+fs.writeFile("hello.txt", "Hello from Node.js!", (err) => {
+    if (err) {
+        console.log(err);
+        return;
+    }
+
+    console.log("File written successfully");
+});
+
+console.log("This runs first");
+Notice that the final line may print before the file-writing callback finishes.
+B. Reading a file
+fs.readFileSync()
+Reads the entire file and returns its contents.
+const fs = require("fs");
+
+const data = fs.readFileSync("hello.txt", "utf8");
+
+console.log(data);
+console.log("Finished reading");
+Output:
+Hello from Node.js!
+Finished reading
+Why "utf8"? Without an encoding, Node.js returns a Buffer instead of a regular string.
+const data = fs.readFileSync("hello.txt");
+
+console.log(data); // Buffer
+fs.readFile()
+The asynchronous version.
+const fs = require("fs");
+
+fs.readFile("hello.txt", "utf8", (err, data) => {
+    if (err) {
+        console.log("Error:", err.message);
+        return;
+    }
+
+    console.log(data);
+});
+
+console.log("Reading started");
+Possible output:
+Reading started
+Hello from Node.js!
+The callback receives two arguments:
+err — an error if reading failed; otherwise null.
+data — the file contents if reading succeeded.
+Always handle errors in callbacks when using these APIs.
+C. Append to a file
+Use this when you want to add content without deleting existing content.
+Synchronous
+fs.appendFileSync("hello.txt", "\nNew line added");
+Asynchronous
+fs.appendFile("hello.txt", "\nAnother line", (err) => {
+    if (err) {
+        console.log(err);
+        return;
+    }
+
+    console.log("Content appended");
+});
+D. Delete a file
+fs.unlinkSync("hello.txt");
+Asynchronous version:
+fs.unlink("hello.txt", (err) => {
+    if (err) {
+        console.log(err);
+        return;
+    }
+
+    console.log("File deleted");
+});
+Be careful: these methods remove the file from the filesystem.
+E. Check whether a file exists
+console.log(fs.existsSync("hello.txt"));
+Returns true or false.
+This is useful for simple checks. For applications that perform file operations, it is generally safer to perform the operation itself and handle its error rather than check first and then operate, because the file can change between those steps.
+F. Create and list directories
+Create a directory:
+fs.mkdirSync("uploads");
+Create a directory and any missing parent directories:
+fs.mkdirSync("data/images", { recursive: true });
+List the contents of a directory:
+const files = fs.readdirSync(".");
+
+console.log(files);
+The "." means the current working directory.
+Get information about a file:
+const stats = fs.statSync("hello.txt");
+
+console.log(stats.size);      // Size in bytes
+console.log(stats.isFile());  // true if it's a file
+console.log(stats.isDirectory()); // true if it's a directory
+Quick reference: fs
+Function
+Purpose
+readFileSync()
+Read a file synchronously
+readFile()
+Read a file asynchronously
+writeFileSync()
+Write or overwrite a file synchronously
+writeFile()
+Write or overwrite a file asynchronously
+appendFileSync()
+Append content synchronously
+appendFile()
+Append content asynchronously
+unlinkSync()
+Delete a file synchronously
+unlink()
+Delete a file asynchronously
+mkdirSync()
+Create a directory
+readdirSync()
+List directory contents
+statSync()
+Get file or directory information
+existsSync()
+Check whether a path exists
+
+3. Synchronous vs asynchronous: the important part
+This is the most important concept to demonstrate to students.
+Synchronous: blocks execution
+const fs = require("fs");
+
+console.log("1. Start");
+
+const data = fs.readFileSync("hello.txt", "utf8");
+
+console.log("2. File content:", data);
+console.log("3. End");
+The order is:
+1. Start
+2. File content: ...
+3. End
+Node.js waits for the file-reading operation to finish before executing the next line.
+Asynchronous: doesn't block while waiting
+const fs = require("fs");
+
+console.log("1. Start");
+
+fs.readFile("hello.txt", "utf8", (err, data) => {
+    if (err) {
+        console.log(err.message);
+        return;
+    }
+
+    console.log("2. File content:", data);
+});
+
+console.log("3. End");
+The usual order is:
+1. Start
+3. End
+2. File content: ...
+Node.js starts the operation and continues executing other code. When the file read completes, the callback is scheduled to run.
+Visual comparison
+Synchronous reading
+Start reading file
+Wait until reading finishes
+Execute next line
+Asynchronous reading
+Start reading file
+Continue executing next lines
+Callback runs when reading completes
+Why does this matter in a server?
+Suppose your Node.js server is handling 100 requests.
+If one request performs a slow synchronous file read, the Node.js event loop cannot run other JavaScript callbacks while that read is blocking. Other requests may have to wait.
+An asynchronous file read allows Node.js to continue handling other work while the file operation is in progress.
+Feature
+Sync
+Async with callback
+Method
+readFileSync()
+readFile()
+Waits for operation before continuing?
+Yes
+No
+Blocks the JavaScript thread during file I/O?
+Yes
+Generally no
+Best suited for
+Small startup tasks, simple scripts
+Servers and concurrent applications
+Error handling
+try/catch for thrown errors
+Check err in callback
+
+Teaching tip: For the same reason, show both writeFileSync() and writeFile() in your demo. The difference is about blocking and execution order, not about what the file contains.
+4. The os module
+The os module provides information about the computer running Node.js.
+const os = require("os");
+Commonly used functions
+1. Operating system platform
+console.log(os.platform());
+Examples: "darwin" on macOS, "win32" on Windows, and "linux" on Linux.
+2. Operating system architecture
+console.log(os.arch());
+Examples: "arm64" or "x64".
+3. CPU information
+console.log(os.cpus());
+Returns an array containing information about each logical CPU core, including its model and speed.
+To count logical CPU cores:
+console.log(os.cpus().length);
+4. Total and free memory
+console.log("Total memory:", os.totalmem());
+console.log("Free memory:", os.freemem());
+These values are in bytes.
+Convert bytes to GB:
+const totalGB = os.totalmem() / (1024 ** 3);
+
+console.log(totalGB.toFixed(2), "GB");
+5. Home directory
+console.log(os.homedir());
+For example, on macOS, it might return:
+/Users/abhishekgupta
+6. System uptime
+console.log(os.uptime());
+Returns the number of seconds the system has been running.
+7. Temporary directory
+console.log(os.tmpdir());
+Returns the operating system's temporary directory.
+8. Current username and hostname
+console.log(os.userInfo().username);
+console.log(os.hostname());
+The hostname is the machine's network hostname, which is not necessarily the same as its local IP address.
+Quick reference: os
+Function
+Purpose
+os.platform()
+Operating system platform
+os.arch()
+CPU architecture
+os.cpus()
+CPU information
+os.totalmem()
+Total memory in bytes
+os.freemem()
+Free memory in bytes
+os.homedir()
+User's home directory
+os.uptime()
+System uptime in seconds
+os.tmpdir()
+Temporary directory
+os.hostname()
+Machine hostname
+os.userInfo()
+Information about the current user
+
+5. The path module
+Different operating systems use different path separators. For example, macOS and Linux use /, while Windows commonly uses \.
+The path module helps you work with paths without manually handling these differences.
+const path = require("path");
+A. path.join()
+Combines path segments using the correct separator for the operating system.
+const filePath = path.join("public", "images", "photo.png");
+
+console.log(filePath);
+On macOS or Linux:
+public/images/photo.png
+Use this when constructing paths from multiple pieces.
+B. path.resolve()
+Creates an absolute path.
+console.log(path.resolve("public", "index.html"));
+Example output:
+/Users/abhishekgupta/node-modules-demo/public/index.html
+The exact output depends on your current working directory.
+Difference: join() combines path segments; resolve() calculates an absolute path from the supplied segments and the current working directory when necessary.
+C. path.basename()
+Gets the final component of a path, usually the filename.
+const filePath = "/users/abhishek/docs/notes.txt";
+
+console.log(path.basename(filePath));
+Output:
+notes.txt
+Get the filename without its extension:
+console.log(path.basename(filePath, ".txt"));
+Output:
+notes
+D. path.dirname()
+Gets the directory portion of a path.
+console.log(path.dirname("/users/abhishek/docs/notes.txt"));
+Output:
+/users/abhishek/docs
+E. path.extname()
+Gets the file extension, including the dot.
+console.log(path.extname("index.html")); // .html
+console.log(path.extname("photo.png"));  // .png
+console.log(path.extname("app.js"));     // .js
+F. path.parse()
+Breaks a path into its components.
+console.log(path.parse("/users/abhishek/notes.txt"));
+It returns an object with fields such as:
+{
+    root: "/",
+    dir: "/users/abhishek",
+    base: "notes.txt",
+    ext: ".txt",
+    name: "notes"
+}
+G. path.isAbsolute()
+Checks whether a path is absolute.
+console.log(path.isAbsolute("/users/abhishek/notes.txt")); // true
+console.log(path.isAbsolute("notes.txt"));                 // false
+H. __dirname vs process.cwd()
+This is particularly useful to explain in Node.js.
+In a CommonJS file:
+console.log(__dirname);
+console.log(process.cwd());
+__dirname is the absolute directory containing the current JavaScript file.
+process.cwd() is the directory from which the Node.js process was launched.
+They can be different.
+For example, if you launch a script from a different directory, process.cwd() reflects the launch directory, not necessarily the directory containing the script.
+Quick reference: path
+Function/property
+Purpose
+path.join()
+Combine path segments
+path.resolve()
+Resolve to an absolute path
+path.basename()
+Get the filename or final path component
+path.dirname()
+Get the containing directory
+path.extname()
+Get the file extension
+path.parse()
+Split a path into components
+path.isAbsolute()
+Check whether a path is absolute
+__dirname
+Current file's directory in CommonJS
+process.cwd()
+Process's current working directory
+
+6. Mini practical demo: combine all three
+Create a file named system-info.js:
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
+
+// 1. Create a directory path
+const directory = path.join(__dirname, "data");
+
+// 2. Create the directory if missing
+fs.mkdirSync(directory, { recursive: true });
+
+// 3. Construct a file path
+const filePath = path.join(directory, "system-info.txt");
+
+// 4. Collect information about the system
+const info = `
+Platform: ${os.platform()}
+Architecture: ${os.arch()}
+CPU cores: ${os.cpus().length}
+Total memory: ${(os.totalmem() / 1024 ** 3).toFixed(2)} GB
+Home directory: ${os.homedir()}
+`;
+
+// 5. Write information to a file
+fs.writeFileSync(filePath, info);
+
+// 6. Read the file back
+const result = fs.readFileSync(filePath, "utf8");
+
+console.log("Saved system information:");
+console.log(result);
+
+console.log("File name:", path.basename(filePath));
+console.log("File extension:", path.extname(filePath));
+Run it:
+node system-info.js
+The program creates a data directory, saves information about the machine to a text file, reads the saved information, and prints its filename and extension.
+This demonstrates how fs, os, and path work together in a practical Node.js program.

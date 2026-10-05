@@ -1,0 +1,588 @@
+Node.js HTTP Server → Express.js: A Practical Lecture
+Abhishek, this is a great lesson to teach right after fs, os, and path. The goal is to help students understand what an HTTP server actually does before introducing Express.js.
+We'll build the same small API twice:
+Using Node.js's built-in http module.
+Using Express.js to see how much code we can eliminate.
+By the end, students should understand HTTP methods, URLs, headers, status codes, request bodies, responses, and why Express is useful.
+1. First, what is an HTTP server?
+Imagine a browser sends this request to your server:
+GET /users HTTP/1.1
+Host: localhost:3000
+Your server processes the request and sends back a response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+[{"id":1,"name":"Abhishek"}]
+The browser and server communicate using the HTTP protocol.
+Client
+Browser, frontend, Postman, curl
+HTTP Request
+Method · URL · Headers · Body
+Node.js HTTP Server
+Receives, processes, and responds
+HTTP Response
+Status code · Headers · Body
+Client receives response
+The server doesn't automatically know what /users means. We write the code that decides what each request should do.
+2. Build a server using Node.js's http module
+Create a project:
+mkdir http-demo
+cd http-demo
+npm init -y
+Create server.js.
+Version 1: The smallest HTTP server
+const http = require("http");
+
+const server = http.createServer((req, res) => {
+    res.end("Hello from Node.js!");
+});
+
+server.listen(3000, () => {
+    console.log("Server running at http://localhost:3000");
+});
+Run it:
+node server.js
+Open http://localhost:3000 in your browser.
+You should see:
+Hello from Node.js!
+Explain each line
+require("http") imports Node.js's built-in HTTP module.
+http.createServer() creates an HTTP server.
+req represents the incoming request.
+res represents the response we're constructing.
+res.end() finishes the response and sends it to the client.
+server.listen(3000) tells the server to listen on port 3000.
+The callback runs for each incoming HTTP request.
+3. Understand the request object (req)
+Let's inspect what the client sends.
+Replace the callback with this:
+const http = require("http");
+
+const server = http.createServer((req, res) => {
+    console.log("Method:", req.method);
+    console.log("URL:", req.url);
+    console.log("Headers:", req.headers);
+
+    res.end("Request received!");
+});
+
+server.listen(3000);
+Open the browser and visit http://localhost:3000/users.
+Example terminal output:
+Method: GET
+URL: /users
+Headers: {
+  host: 'localhost:3000',
+  connection: 'keep-alive',
+  ...
+}
+The exact headers vary by client and browser.
+Important request fields
+Field
+Meaning
+Example
+req.method
+HTTP method
+GET, POST
+req.url
+Request path and query string
+/users?page=2
+req.headers
+Incoming headers
+content-type
+req.socket.remoteAddress
+Remote connection address
+Client IP address, possibly a proxy
+req body
+Incoming data stream
+JSON sent in a POST request
+
+One important detail: req.url is not just a path; it can include the query string too.
+For example:
+/users?page=2&limit=10
+To parse it, use the built-in URL class:
+const url = new URL(req.url, "http://localhost:3000");
+
+console.log(url.pathname);          // /users
+console.log(url.searchParams.get("page")); // 2
+The base URL here is used to parse a relative request URL; it doesn't mean the server needs to run at that hostname.
+4. HTTP methods: what action are we asking for?
+Suppose you're building a student management API. You need to retrieve students, add new students, update them, and delete them.
+HTTP methods communicate the intended operation.
+Method
+Common purpose
+Example
+GET
+Retrieve data
+GET /users
+POST
+Create a resource or submit data
+POST /users
+PUT
+Replace a resource
+PUT /users/1
+PATCH
+Partially update a resource
+PATCH /users/1
+DELETE
+Delete a resource
+DELETE /users/1
+
+These are conventions used by APIs. The method alone does not implement the operation; our server code must do that.
+A browser address bar normally sends GET requests. To test POST, PUT, PATCH, and DELETE, use curl, Postman, or frontend fetch().
+5. Build a tiny API using only http
+Let's make a small in-memory student API.
+It will support:
+GET /students — retrieve all students.
+GET /students/1 — retrieve one student.
+POST /students — add a student.
+PUT /students/1 — replace a student's details.
+PATCH /students/1 — update selected fields.
+DELETE /students/1 — delete a student.
+For simplicity, data will live in an array. Restarting the server resets the data. This is a classroom demo, not a persistent database.
+Create server.js with the following code:
+const http = require("http");
+
+let students = [
+    { id: 1, name: "Abhishek" },
+    { id: 2, name: "Rahul" }
+];
+
+function sendJSON(res, statusCode, data) {
+    res.writeHead(statusCode, {
+        "Content-Type": "application/json; charset=utf-8"
+    });
+
+    res.end(JSON.stringify(data));
+}
+
+function readBody(req, callback) {
+    let body = "";
+
+    req.on("data", (chunk) => {
+        body += chunk;
+    });
+
+    req.on("end", () => {
+        try {
+            callback(null, JSON.parse(body));
+        } catch {
+            callback(new Error("Invalid JSON"));
+        }
+    });
+}
+
+const server = http.createServer((req, res) => {
+    const url = new URL(req.url, "http://localhost:3000");
+    const pathname = url.pathname;
+    const method = req.method;
+
+    // GET /students
+    if (method === "GET" && pathname === "/students") {
+        return sendJSON(res, 200, students);
+    }
+
+    // GET /students/:id
+    const match = pathname.match(/^\/students\/(\d+)$/);
+
+    if (match) {
+        const id = Number(match[1]);
+        const student = students.find(s => s.id === id);
+
+        if (method === "GET") {
+            if (!student) {
+                return sendJSON(res, 404, { error: "Student not found" });
+            }
+
+            return sendJSON(res, 200, student);
+        }
+
+        if (method === "POST") {
+            return sendJSON(res, 405, { error: "Method not allowed" });
+        }
+
+        if (method === "PUT" || method === "PATCH") {
+            if (!student) {
+                return sendJSON(res, 404, { error: "Student not found" });
+            }
+
+            return readBody(req, (err, body) => {
+                if (err) {
+                    return sendJSON(res, 400, { error: err.message });
+                }
+
+                if (typeof body.name !== "string" || !body.name.trim()) {
+                    return sendJSON(res, 400, { error: "Name is required" });
+                }
+
+                student.name = body.name.trim();
+
+                return sendJSON(res, 200, student);
+            });
+        }
+
+        if (method === "DELETE") {
+            if (!student) {
+                return sendJSON(res, 404, { error: "Student not found" });
+            }
+
+            students = students.filter(s => s.id !== id);
+
+            return sendJSON(res, 200, { message: "Student deleted" });
+        }
+
+        return sendJSON(res, 405, { error: "Method not allowed" });
+    }
+
+    // POST /students
+    if (method === "POST" && pathname === "/students") {
+        return readBody(req, (err, body) => {
+            if (err) {
+                return sendJSON(res, 400, { error: err.message });
+            }
+
+            if (typeof body.name !== "string" || !body.name.trim()) {
+                return sendJSON(res, 400, { error: "Name is required" });
+            }
+
+            const student = {
+                id: Math.max(0, ...students.map(s => s.id)) + 1,
+                name: body.name.trim()
+            };
+
+            students.push(student);
+
+            return sendJSON(res, 201, student);
+        });
+    }
+
+    return sendJSON(res, 404, { error: "Route not found" });
+});
+
+server.listen(3000, () => {
+    console.log("Server running at http://localhost:3000");
+});
+This is already quite a bit of code for a tiny API. Also, to keep the example focused, the PUT and PATCH handlers currently both update the name; a proper API would distinguish full replacement from partial updates.
+6. Test the API without a browser
+Keep the server running in one terminal. Open another terminal and run these commands.
+A. Get all students
+curl -i http://localhost:3000/students
+Example response:
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+[{"id":1,"name":"Abhishek"},{"id":2,"name":"Rahul"}]
+The -i option displays response headers as well as the body.
+B. Get one student
+curl -i http://localhost:3000/students/1
+C. Create a student
+curl -i -X POST http://localhost:3000/students \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Priya"}'
+The response should have status 201 Created, with the newly created student in the response body.
+D. Update a student
+curl -i -X PATCH http://localhost:3000/students/1 \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Abhishek Gupta"}'
+E. Delete a student
+curl -i -X DELETE http://localhost:3000/students/2
+F. Try a student that doesn't exist
+curl -i http://localhost:3000/students/999
+The server responds with 404 Not Found.
+7. Understand the response object (res)
+In the built-in http module, we manually construct the response.
+A. res.writeHead()
+Sets the HTTP status code and response headers.
+res.writeHead(200, {
+    "Content-Type": "application/json"
+});
+B. res.statusCode
+Sets the status code separately.
+res.statusCode = 404;
+res.end("Page not found");
+C. res.setHeader()
+Sets an individual response header.
+res.setHeader("Content-Type", "text/plain");
+res.end("Hello!");
+Set headers before ending the response.
+D. res.write()
+Writes part of the response body without finishing it.
+res.write("Hello ");
+res.write("students!");
+res.end();
+The client receives:
+Hello students!
+E. res.end()
+Finishes the response. You can optionally pass the final piece of the body.
+res.end("Done!");
+A response should normally be ended exactly once. If you forget to end it, the client may keep waiting.
+Common HTTP status codes
+Status
+Meaning
+Example
+200 OK
+Request succeeded
+Fetching a student
+201 Created
+Resource created
+Adding a student
+204 No Content
+Success with no response body
+Deleting a student
+400 Bad Request
+Invalid request data
+Malformed JSON
+401 Unauthorized
+Authentication required or failed
+Missing login credentials
+403 Forbidden
+Access denied
+Insufficient permission
+404 Not Found
+Resource or route not found
+Student ID doesn't exist
+405 Method Not Allowed
+Method isn't supported for the resource
+Unsupported operation
+500 Internal Server Error
+Unexpected server failure
+Unhandled application error
+
+These codes are part of HTTP, not specific to Node.js or Express.
+8. The problem: why is the built-in HTTP code so long?
+Look at the work we had to do ourselves:
+Match HTTP methods and URL paths.
+Extract route parameters such as :id.
+Read the request body in chunks.
+Parse JSON and handle invalid input.
+Set response headers and status codes.
+Serialize JSON using JSON.stringify().
+Handle missing resources and unsupported methods.
+Remember to end the response.
+None of that is inherently impossible with Node.js's http module. It simply requires us to write more plumbing code.
+This is where Express.js comes in.
+Express is a web framework built on top of Node.js's HTTP capabilities. It gives us convenient routing, request-body parsing middleware, response helpers, and other tools.
+Express doesn't replace Node.js. It makes building HTTP applications easier.
+9. Install Express.js
+Stop the first server with Ctrl + C, then install Express:
+npm install express
+Create a new file named express-server.js.
+The same API using Express
+Compare this with the built-in HTTP version.
+const express = require("express");
+
+const app = express();
+
+app.use(express.json());
+
+let students = [
+    { id: 1, name: "Abhishek" },
+    { id: 2, name: "Rahul" }
+];
+
+// GET all students
+app.get("/students", (req, res) => {
+    res.json(students);
+});
+
+// GET one student
+app.get("/students/:id", (req, res) => {
+    const id = Number(req.params.id);
+    const student = students.find(s => s.id === id);
+
+    if (!student) {
+        return res.status(404).json({
+            error: "Student not found"
+        });
+    }
+
+    res.json(student);
+});
+
+// CREATE a student
+app.post("/students", (req, res) => {
+    const { name } = req.body;
+
+    if (typeof name !== "string" || !name.trim()) {
+        return res.status(400).json({
+            error: "Name is required"
+        });
+    }
+
+    const student = {
+        id: Math.max(0, ...students.map(s => s.id)) + 1,
+        name: name.trim()
+    };
+
+    students.push(student);
+
+    res.status(201).json(student);
+});
+
+// UPDATE a student's name
+app.patch("/students/:id", (req, res) => {
+    const id = Number(req.params.id);
+    const student = students.find(s => s.id === id);
+
+    if (!student) {
+        return res.status(404).json({
+            error: "Student not found"
+        });
+    }
+
+    const { name } = req.body;
+
+    if (typeof name !== "string" || !name.trim()) {
+        return res.status(400).json({
+            error: "Name is required"
+        });
+    }
+
+    student.name = name.trim();
+
+    res.json(student);
+});
+
+// REPLACE a student's details
+app.put("/students/:id", (req, res) => {
+    const id = Number(req.params.id);
+    const student = students.find(s => s.id === id);
+
+    if (!student) {
+        return res.status(404).json({
+            error: "Student not found"
+        });
+    }
+
+    const { name } = req.body;
+
+    if (typeof name !== "string" || !name.trim()) {
+        return res.status(400).json({
+            error: "Name is required"
+        });
+    }
+
+    student.name = name.trim();
+
+    res.json(student);
+});
+
+// DELETE a student
+app.delete("/students/:id", (req, res) => {
+    const id = Number(req.params.id);
+    const exists = students.some(s => s.id === id);
+
+    if (!exists) {
+        return res.status(404).json({
+            error: "Student not found"
+        });
+    }
+
+    students = students.filter(s => s.id !== id);
+
+    res.status(204).end();
+});
+
+// Handle unknown routes
+app.use((req, res) => {
+    res.status(404).json({
+        error: "Route not found"
+    });
+});
+
+app.listen(3000, () => {
+    console.log("Express server running at http://localhost:3000");
+});
+Run it:
+node express-server.js
+The same curl commands from the previous section work against this server too.
+One simplification: the PUT example above updates the only field in this simplified student model. In a real API, PUT generally replaces the resource representation, while PATCH changes only specified fields.
+10. Where did all that code go?
+Built-in HTTP vs Express
+Node.js HTTP
+Manual handling
+Inspect req.method, parse URLs, read body chunks, parse JSON, build headers and responses, and match routes yourself.
+Express
+Convenient abstractions
+Use app.get(), app.post(), req.params, req.body, res.json(), and res.status().
+Express doesn't eliminate the need for validation, error handling, authentication, or business logic. It reduces repetitive HTTP plumbing.
+Here's the direct comparison for one endpoint.
+Node.js HTTP
+if (req.method === "GET" && pathname === "/students") {
+    res.writeHead(200, {
+        "Content-Type": "application/json"
+    });
+
+    res.end(JSON.stringify(students));
+}
+Express
+app.get("/students", (req, res) => {
+    res.json(students);
+});
+The Express version is shorter because Express handles the routing and JSON response mechanics for us.
+11. The three Express concepts students should understand
+A. Routing
+Instead of manually checking conditions for every URL and method:
+if (req.method === "GET" && pathname === "/students") {
+    // ...
+}
+We write:
+app.get("/students", handler);
+app.post("/students", handler);
+app.delete("/students/:id", handler);
+The framework matches the incoming request to the appropriate route.
+B. Middleware
+Middleware is a function that runs during the request-response cycle. It can inspect or modify requests, perform authentication, log activity, parse data, or pass control to the next middleware.
+For example:
+app.use(express.json());
+This middleware parses incoming JSON request bodies, making the parsed data available through req.body.
+Without it, req.body won't automatically contain the parsed JSON for a standard incoming request.
+You can also write your own middleware:
+app.use((req, res, next) => {
+    console.log(req.method, req.url);
+    next();
+});
+Here, next() passes control to the next middleware or matching route handler.
+C. Request data
+Express gives you convenient ways to access different parts of the request.
+Property
+Example request
+Value
+req.params
+/students/5
+{ id: "5" }
+req.query
+/students?page=2
+{ page: "2" }
+req.body
+JSON sent in a POST request
+{ name: "Priya" }
+req.method
+GET /students
+"GET"
+req.headers
+Request headers
+Header object
+
+For example:
+app.get("/students/:id", (req, res) => {
+    console.log(req.params.id);
+    console.log(req.query.page);
+
+    res.json({ message: "Student retrieved" });
+});
+For /students/5?page=2, the values are "5" and "2".
+Remember that values from URL parameters and query strings are strings initially. Validate and convert them when needed.
+12. A classroom challenge
+Ask students to make these changes to the Express server without looking at the previous examples.
+Practice checklist
+0/6
+Add GET /health that returns { status: "ok" }.
+Add GET /students/count that returns the number of students.
+Add a query parameter so GET /students?name=rahul filters students by name.
+Return 400 if the student name is missing or empty.
+Add a middleware that logs the HTTP method and URL.
+Test all routes using curl and inspect status codes.
+One useful extension: ask students to implement the same /health endpoint first using raw http, then using Express. They will see exactly which repetitive work Express removes.
+The main takeaway: Node.js provides the low-level HTTP capabilities; Express builds a more convenient programming model on top of them. Learning the raw HTTP version first makes Express much easier to understand rather than just memorizing its syntax.
+

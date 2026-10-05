@@ -1,0 +1,15 @@
+{
+  "name": "nodenpm",
+  "version": "7.0.0",
+  "description": "thids is my first npm project",
+  "main": "src/index.js",
+  "scripts": {
+    "dev" : "node src/dev.js",
+    "test" : "node src/test.js",
+    "start" : "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}

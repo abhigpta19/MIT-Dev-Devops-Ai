@@ -1220,7 +1220,6 @@ Now modify your code and demonstrate automatic restarting.
 
 # 27. Now the exciting part — HTTP
 
-At this point say:
 
 > “We have JavaScript running on the server. We can access the filesystem. We have modules. We can install packages.”
 
@@ -1252,11 +1251,7 @@ Browser
 
 # 28. Build an HTTP server WITHOUT Express
 
-This is critical.
 
-Do NOT introduce Express first.
-
-Students need to see what Express is simplifying.
 
 Create:
 
