@@ -10,6 +10,7 @@ import React from 'react'
 
 function Home()
 {
+    alert("home component");
     return <h1>this is my home component</h1>;
 }
 
